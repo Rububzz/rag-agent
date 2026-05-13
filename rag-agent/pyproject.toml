@@ -1,0 +1,16 @@
+[project]
+name = "rag-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb>=1.5.9",
+    "fastapi>=0.136.1",
+    "groq>=1.2.0",
+    "numpy>=2.4.4",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.28",
+    "sentence-transformers>=5.4.1",
+    "uvicorn>=0.46.0",
+]
