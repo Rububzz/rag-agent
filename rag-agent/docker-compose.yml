@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    container_name: rag_agent
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
