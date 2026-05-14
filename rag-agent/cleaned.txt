@@ -1,5 +1,0 @@
-retrieval augmented generation is a technique that combines information retrieval 
-with text generation. instead of relying solely on what a language model learned 
-during training, rag first searches a knowledge base for relevant information, 
-then passes that information to the model as context when generating a response.
-this allows the model to answer questions about documents it has never seen before.
