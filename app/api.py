@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from app.chunker import chunk_text
 from app.llm import ask
-from app.retriever import add_documents, search
+from app.retriever import add_documents, delete_document, search
 
 app = FastAPI()
 
@@ -70,3 +70,15 @@ def health():
         "status": "ok",
         "current time": time.time(),
     }
+
+
+@app.delete("/document")
+def delete():
+    start = time.time()
+    try:
+        delete_document()
+        duration = (time.time() - start) * 1000
+        return {"message": f"Cleared Collection", "duration": duration}
+    except Exception as e:
+        logger.warning(f"Failed to delete with message: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
