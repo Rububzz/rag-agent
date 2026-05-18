@@ -68,3 +68,15 @@ Ask a question against uploaded documents.
    - When "How does RAG work?" returned photosynthesis as the second result but the longer query returned correct results
 5. Error handling matters
    - When ChromaDB was empty the LLM hallucinated a confident answer instead of saying it didn't know, which is why validation is critical in RAG systems
+
+## Benchmarks
+
+### Chunk Size
+
+| Chunk Size | Score | Pass Rate |
+| ---------- | ----- | --------- |
+| 50 words   | 12/20 | 60%       |
+| 100 words  | 15/20 | 75%       |
+| 200 words  | 15/20 | 75%       |
+
+Benchmarking across chunk sizes showed that 50-word chunks degraded performance by 15% compared to larger sizes. Chunk sizes 100 and 200 performed equally at 75%, suggesting diminishing returns beyond 100 words for this document. The 5 remaining failures were consistent across all chunk sizes, indicating retrieval limitations rather than chunk size issues. Default chunk size set to 100 words.
