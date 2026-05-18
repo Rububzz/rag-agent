@@ -1796,6 +1796,7 @@ dependencies = [
     { name = "numpy" },
     { name = "python-dotenv" },
     { name = "python-multipart" },
+    { name = "requests" },
     { name = "sentence-transformers" },
     { name = "uvicorn" },
 ]
@@ -1808,6 +1809,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.4.4" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "python-multipart", specifier = ">=0.0.28" },
+    { name = "requests", specifier = ">=2.34.0" },
     { name = "sentence-transformers", specifier = ">=5.4.1" },
     { name = "uvicorn", specifier = ">=0.46.0" },
 ]

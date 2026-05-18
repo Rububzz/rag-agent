@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "question": "What are the four main whorls of a flower?",
+    "expected_keywords": [
+      "protective leaves",
+      "petals",
+      "male parts",
+      "female parts"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "When did flowers first evolve and in which period?",
+    "expected_keywords": ["150", "190", "jurassic"]
+  },
+  {
+    "id": 3,
+    "question": "What is the difference between cross-pollination and self-pollination?",
+    "expected_keywords": ["different", "same plant", "same flower"]
+  },
+  {
+    "id": 4,
+    "question": "What is the function of the gynoecium?",
+    "expected_keywords": ["pollen", "ovules", "carpels"]
+  },
+  {
+    "id": 5,
+    "question": "What is pollination?",
+    "expected_keywords": ["pollen", "male", "female"]
+  },
+  {
+    "id": 6,
+    "question": "How do flower colours attract pollinators?",
+    "expected_keywords": ["attract", "pollinators", "nectar"]
+  },
+  {
+    "id": 7,
+    "question": "What is an inflorescence?",
+    "expected_keywords": ["cluster", "flowers"]
+  },
+  {
+    "id": 8,
+    "question": "What is the ABC model of flower development?",
+    "expected_keywords": ["genes", "petals", "development"]
+  },
+  {
+    "id": 9,
+    "question": "What are two examples of flowers used as spices?",
+    "expected_keywords": ["saffron", "cloves"]
+  },
+  {
+    "id": 10,
+    "question": "What is florigen and what does it do?",
+    "expected_keywords": ["leaves", "flowering", "conditions"]
+  },
+  {
+    "id": 11,
+    "question": "What are the functions of sepals in a flower?",
+    "expected_keywords": ["protect", "flower", "fruit"]
+  },
+  {
+    "id": 12,
+    "question": "What role do petals play in pollination?",
+    "expected_keywords": ["attract pollinators"]
+  },
+  {
+    "id": 13,
+    "question": "What is the difference between biotic and abiotic pollination?",
+    "expected_keywords": ["living", "wind", "water"]
+  },
+  {
+    "id": 14,
+    "question": "Which animals commonly act as pollinators for flowers?",
+    "expected_keywords": ["insects", "birds", "bats"]
+  },
+  {
+    "id": 15,
+    "question": "What happens during fertilisation in flowering plants?",
+    "expected_keywords": ["male", "female", "pollen", "egg"]
+  },
+  {
+    "id": 16,
+    "question": "What structures develop from the ovary after fertilisation?",
+    "expected_keywords": ["fruit"]
+  },
+  {
+    "id": 17,
+    "question": "Why is seed dispersal important for flowering plants?",
+    "expected_keywords": ["competition", "coloniz"]
+  },
+  {
+    "id": 18,
+    "question": "What is the difference between monoecious and dioecious plants?",
+    "expected_keywords": ["monoecious", "dioecious", "same plant"]
+  },
+  {
+    "id": 19,
+    "question": "Why are flowers important in plant taxonomy?",
+    "expected_keywords": ["morphology", "classify", "taxonomy"]
+  },
+  {
+    "id": 20,
+    "question": "How have humans used flowers throughout history?",
+    "expected_keywords": ["decoration", "medicine", "food", "perfumes"]
+  }
+]
