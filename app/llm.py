@@ -22,7 +22,12 @@ def ask(question: str, context: str) -> str:
                 {"role": "user", "content": question},
             ],
         )
-        return response.choices[0].message.content
+        return {
+            "answer": response.choices[0].message.content,
+            "prompt_tokens": response.usage.prompt_tokens,
+            "completion_tokens": response.usage.completion_tokens,
+            "total_tokens": response.usage.total_tokens,
+        }
     except Exception as e:
         logger.error(f"Failed to cal Groq")
         raise RuntimeError(f"LLM request failed: {e}")

@@ -63,15 +63,24 @@ def query(req: QueryRequest):
                 status_code=400, detail="No document found. Please upload a document"
             )
         context = " ".join(results)
-        answer = ask(req.question, context)
+        llm_result = ask(req.question, context)
+        answer = llm_result["answer"]
         duration = round((time.time() - start) * 1000)
         set_cached(req.question, answer)
+        logger.info(
+            f"Query answered in {duration}ms, {llm_result['total_tokens']} tokens used (prompt: {llm_result['prompt_tokens']}, completion: {llm_result['completion_tokens']})"
+        )
         return {
             "question": req.question,
             "answer": answer,
             "chunks_used": results,
             "duration_ms": duration,
             "cached": False,
+            "token_usage": {
+                "prompt_tokens": llm_result["prompt_tokens"],
+                "completion_tokens": llm_result["completion_tokens"],
+                "total_tokens": llm_result["total_tokens"],
+            },
         }
     except HTTPException:
         raise
