@@ -31,10 +31,11 @@ async def upload(file: UploadFile = File(...)):
         content = await file.read()
         text = content.decode("utf-8")
         chunks = chunk_text(text)
-        add_documents(chunks)
+        add_documents(chunks, file.filename)
         duration = round((time.time() - start) * 1000)
         return {
             "message": f"Uploaded and indexed {len(chunks)} chunks",
+            "filename": file.filename,
             "duration_ms": duration,
         }
     except RuntimeError as e:

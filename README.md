@@ -77,15 +77,15 @@ Ask a question against uploaded documents.
 
 ## Benchmarks
 
-### Chunk Size
+### Chunk Size (averaged over 3 runs)
 
-| Chunk Size | Score | Pass Rate |
-| ---------- | ----- | --------- |
-| 50 words   | 12/20 | 60%       |
-| 100 words  | 15/20 | 75%       |
-| 200 words  | 15/20 | 75%       |
+| Chunk Size | Avg Score | Avg Pass Rate |
+| ---------- | --------- | ------------- |
+| 50 words   | 12/20     | 60%           |
+| 100 words  | 15.3/20   | 77%           |
+| 200 words  | 15/20     | 75%           |
 
-Benchmarking across chunk sizes showed that 50-word chunks degraded performance by 15% compared to larger sizes. Chunk sizes 100 and 200 performed equally at 75%, suggesting diminishing returns beyond 100 words for this document. The 5 remaining failures were consistent across all chunk sizes, indicating retrieval limitations rather than chunk size issues. Default chunk size set to 100 words.
+Note: Results vary slightly between runs due to LLM non-determinism. Each configuration was averaged over 3 runs for stability.
 
 ### Top-K Retrieval
 
