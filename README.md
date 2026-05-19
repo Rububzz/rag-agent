@@ -6,12 +6,18 @@ Built to learn Python, FastAPI, and core RAG engineering concepts from scratch..
 
 ## Architecture
 
-Client -> FastAPI -> ChromaDB (retrieval)
--> Groq LLM (generation)
-
-FastAPI: Provides the backend API that can then be called
-ChromaDB: In-memory vector database for adding and retrieving documents semantically
-Groq LLM: Generates answers using only the retrieved chunks as context, preventing hallucination
+```mermaid
+flowchart TD
+    Client-->|HTTP Request|FastAPI
+    FastAPI-->|Check Cache|Redis
+    Redis-->|Cache Hit|FastAPI
+    FastAPI-->|Cache Miss|ChromaDB
+    ChromaDB-->|Relevant Chunks|FastAPI
+    FastAPI-->|Question + Context|Groq
+    Groq-->|Answer|FastAPI
+    FastAPI-->|Store Answer|Redis
+    FastAPI-->|HTTP Response|Client
+```
 
 ## How to Run
 
