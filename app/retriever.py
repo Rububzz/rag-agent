@@ -1,15 +1,20 @@
 import logging
+from pathlib import Path
 
 import chromadb
 
 from app.embedder import embed
 
 logger = logging.getLogger(__name__)
-client = chromadb.Client()
+
+CHROMA_PATH = Path("./chroma_data")
+COLLECTION_NAME = "documents"
+
+client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 
 
 def get_collection():
-    return client.get_or_create_collection("my_doc")
+    return client.get_or_create_collection(COLLECTION_NAME)
 
 
 def add_documents(chunks: list[str]):
