@@ -80,3 +80,14 @@ Ask a question against uploaded documents.
 | 200 words  | 15/20 | 75%       |
 
 Benchmarking across chunk sizes showed that 50-word chunks degraded performance by 15% compared to larger sizes. Chunk sizes 100 and 200 performed equally at 75%, suggesting diminishing returns beyond 100 words for this document. The 5 remaining failures were consistent across all chunk sizes, indicating retrieval limitations rather than chunk size issues. Default chunk size set to 100 words.
+
+### Top-K Retrieval
+
+| Top-K | Score | Pass Rate |
+| ----- | ----- | --------- |
+| k=1   | 13/20 | 65%       |
+| k=2   | 17/20 | 85%       |
+| k=3   | 16/20 | 80%       |
+| k=5   | 17/20 | 85%       |
+
+k=2 is the optimal value — matches k=5 performance at 85% while using less context, resulting in lower latency and fewer tokens. k=1 is insufficient context at 65%. Default set to k=2.

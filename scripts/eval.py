@@ -1,4 +1,5 @@
 import json
+import sys
 
 import requests
 
@@ -16,8 +17,10 @@ def upload_document(filepath: str):
     print(response.json())
 
 
-def query(question: str) -> dict:
-    response = requests.post(f"{API_URL}/query", json={"question": question})
+def query(question: str, top_k: int = 2) -> dict:
+    response = requests.post(
+        f"{API_URL}/query", json={"question": question, "top_k": top_k}
+    )
     return response.json()
 
 
@@ -34,12 +37,12 @@ def evaluate(answer: str, expected_keywords: list) -> dict:
     return result
 
 
-def main():
+def main(top_k: int = 2):
     questions = load_questions("scripts/questions.json")
     upload_document("documents/flower.txt")
     results = []
     for question in questions:
-        query_result = query(question["question"])
+        query_result = query(question["question"], top_k=top_k)
         eval_result = evaluate(query_result["answer"], question["expected_keywords"])
         eval_result["id"] = question["id"]
         eval_result["question"] = question["question"]
@@ -55,4 +58,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    top_k = int(sys.argv[1]) if len(sys.argv) > 1 else 2
+    main(top_k)

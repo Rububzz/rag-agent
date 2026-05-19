@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class QueryRequest(BaseModel):
     question: str
+    top_k: int = 2
 
 
 @app.post("/upload")
@@ -43,7 +44,7 @@ async def upload(file: UploadFile = File(...)):
 def query(req: QueryRequest):
     start = time.time()
     try:
-        results = search(req.question)
+        results = search(req.question, n=req.top_k)
         if not results or all(r.strip() == "" for r in results):
             raise HTTPException(
                 status_code=400, detail="No document found. Please upload a document"
