@@ -103,3 +103,12 @@ k=2 is the optimal value — matches k=5 performance at 85% while using less con
 | Q16 — ovary structures      | ✗     | ✓      | ✗           |
 
 Query phrasing significantly affects retrieval quality. Longer queries don't always improve results — Q4 showed that over-specifying degraded retrieval. Q15 failed across all phrasings, indicating a genuine retrieval gap where the relevant chunk is not being retrieved regardless of query formulation. Optimal phrasing depends on document structure and embedding model behaviour.
+
+### Redis Caching
+
+| Query Type     | Average Latency |
+| -------------- | --------------- |
+| Uncached (LLM) | ~1885ms         |
+| Cached         | ~1ms            |
+
+Implemented Redis caching to store LLM responses. Cache is invalidated on every document upload or delete, ensuring answers always reflect the current document. Repeated queries are served from cache at ~1ms vs ~1885ms uncached — a 99.9% latency reduction.
