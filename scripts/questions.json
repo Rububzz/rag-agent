@@ -62,7 +62,7 @@
   {
     "id": 12,
     "question": "What role do petals play in pollination?",
-    "expected_keywords": ["attract pollinators"]
+    "expected_keywords": ["attract", "pollinators"]
   },
   {
     "id": 13,

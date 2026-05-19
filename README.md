@@ -91,3 +91,15 @@ Benchmarking across chunk sizes showed that 50-word chunks degraded performance 
 | k=5   | 17/20 | 85%       |
 
 k=2 is the optimal value — matches k=5 performance at 85% while using less context, resulting in lower latency and fewer tokens. k=1 is insufficient context at 65%. Default set to k=2.
+
+### Query Phrasing
+
+| Question                    | Short | Medium | Descriptive |
+| --------------------------- | ----- | ------ | ----------- |
+| Q4 — gynoecium function     | ✓     | ✓      | ✗           |
+| Q8 — ABC model              | ✗     | ✗      | ✓           |
+| Q12 — petals in pollination | ✗     | ✓      | ✓           |
+| Q15 — fertilisation         | ✗     | ✗      | ✗           |
+| Q16 — ovary structures      | ✗     | ✓      | ✗           |
+
+Query phrasing significantly affects retrieval quality. Longer queries don't always improve results — Q4 showed that over-specifying degraded retrieval. Q15 failed across all phrasings, indicating a genuine retrieval gap where the relevant chunk is not being retrieved regardless of query formulation. Optimal phrasing depends on document structure and embedding model behaviour.
