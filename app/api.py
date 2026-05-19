@@ -38,7 +38,7 @@ async def upload(file: UploadFile = File(...)):
             "duration_ms": duration,
         }
     except RuntimeError as e:
-        logger.warning(f"Upload Failed: {e}")
+        logger.error(f"Upload Failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -85,7 +85,7 @@ def query(req: QueryRequest):
     except HTTPException:
         raise
     except Exception as e:
-        logger.warning(f"Failed to query: {e}")
+        logger.error(f"Failed to query: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -106,5 +106,5 @@ def delete():
         clear_cache()
         return {"message": f"Cleared Collection", "duration": duration}
     except Exception as e:
-        logger.warning(f"Failed to delete with message: {e}")
+        logger.error(f"Failed to delete with message: {e}")
         raise HTTPException(status_code=500, detail=str(e))

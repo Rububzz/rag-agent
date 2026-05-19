@@ -29,5 +29,5 @@ def ask(question: str, context: str) -> str:
             "total_tokens": response.usage.total_tokens,
         }
     except Exception as e:
-        logger.error(f"Failed to cal Groq")
+        logger.error(f"Failed to call Groq")
         raise RuntimeError(f"LLM request failed: {e}")
