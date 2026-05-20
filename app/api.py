@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from app.cache import clear_cache, get_cached, set_cached
 from app.chunker import chunk_text
 from app.llm import ask
+from app.parser import extract_text
 from app.retriever import add_documents, delete_document, search
 
 app = FastAPI()
@@ -29,7 +30,7 @@ async def upload(file: UploadFile = File(...)):
         logger.info("Starting Upload")
         clear_cache()
         content = await file.read()
-        text = content.decode("utf-8")
+        text = extract_text(content, file.filename)
         chunks = chunk_text(text)
         add_documents(chunks, file.filename)
         duration = round((time.time() - start) * 1000)
@@ -38,6 +39,8 @@ async def upload(file: UploadFile = File(...)):
             "filename": file.filename,
             "duration_ms": duration,
         }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except RuntimeError as e:
         logger.error(f"Upload Failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
