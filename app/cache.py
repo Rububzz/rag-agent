@@ -1,14 +1,23 @@
+import json
+
 import redis
 
 client = redis.Redis(host="localhost", port=6379)
 
-def get_cached(question: str) -> str | None:
-    data = client.get(question)
-    return data.decode("utf-8") if data else None
+
+def build_cache_key(question: str, top_k: int) -> str:
+    return f"{question.lower().strip()}:{top_k}"
 
 
-def set_cached(question: str, answer: str) -> None:
-    client.set(question, answer)
+def get_cached(question: str, top_k: int) -> dict | None:
+    key = build_cache_key(question, top_k)
+    data = client.get(key)
+    return json.loads(data) if data else None
+
+
+def set_cached(question: str, top_k: int, context: dict) -> None:
+    key = build_cache_key(question, top_k)
+    client.set(key, json.dumps(context))
 
 
 def clear_cache() -> None:

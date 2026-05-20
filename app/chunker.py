@@ -1,4 +1,4 @@
-def chunk_text(text: str, size: int = 200, overlap: int = 0) -> list[str]:
+def chunk_text(text: str, size: int = 200, overlap: int = 50) -> list[str]:
     if size <= 0:
         raise ValueError("size must be greater than 0")
 

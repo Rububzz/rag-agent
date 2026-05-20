@@ -28,7 +28,7 @@ def add_documents(chunks: list[str], filename: str):
                 metadatas=[
                     {
                         "filename": filename,
-                        "chunk_id": i,
+                        "chunk_index": i,
                     }
                 ],
             )
@@ -38,10 +38,14 @@ def add_documents(chunks: list[str], filename: str):
         raise RuntimeError(f"Failed to index documents: {e}")
 
 
-def search(question: str, n: int = 2) -> list[str]:
+def search(question: str, n: int = 2) -> dict:
     try:
         collection = get_collection()
-        results = collection.query(query_embeddings=[embed(question)], n_results=n)
+        results = collection.query(
+            query_embeddings=[embed(question)],
+            n_results=n,
+            include=["documents", "metadatas"],
+        )
         return {
             "documents": results["documents"][0],
             "metadatas": results["metadatas"][0],

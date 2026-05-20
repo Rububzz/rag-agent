@@ -47,41 +47,52 @@ async def upload(file: UploadFile = File(...)):
 def query(req: QueryRequest):
     start = time.time()
     try:
-        cache_result = get_cached(req.question)
-        if cache_result is not None:
-            duration = round((time.time() - start) * 1000)
-            logger.info(f"Cache hit for question: {req.question}")
-            return {
-                "question": req.question,
-                "answer": cache_result,
-                "chunks_used": [],
-                "duration_ms": duration,
-                "cached": True,
+        cache_result = get_cached(req.question, req.top_k)
+        cache_hit = cache_result is not None
+        if not cache_hit:
+            results = search(req.question, n=req.top_k)
+            documents = results["documents"]
+            metadatas = results["metadatas"]
+            if not documents or all(d.strip() == "" for d in documents):
+                raise HTTPException(
+                    status_code=400,
+                    detail="No document found. Please upload a document",
+                )
+            cache_result = {
+                "documents": documents,
+                "metadatas": metadatas,
             }
-        results = search(req.question, n=req.top_k)
-        if not results or all(r.strip() == "" for r in results):
-            raise HTTPException(
-                status_code=400, detail="No document found. Please upload a document"
-            )
-        context = " ".join(results)
+            set_cached(req.question, req.top_k, cache_result)
+        documents = cache_result["documents"]
+        metadatas = cache_result["metadatas"]
+        context = "\n\n".join(
+            f"[Source {i + 1}: {metadata['filename']} | chunk {metadata['chunk_index']}]\n{doc}"
+            for i, (doc, metadata) in enumerate(zip(documents, metadatas))
+        )
         llm_result = ask(req.question, context)
         answer = llm_result["answer"]
         duration = round((time.time() - start) * 1000)
-        set_cached(req.question, answer)
         logger.info(
             f"Query answered in {duration}ms, {llm_result['total_tokens']} tokens used (prompt: {llm_result['prompt_tokens']}, completion: {llm_result['completion_tokens']})"
         )
         return {
             "question": req.question,
             "answer": answer,
-            "chunks_used": results,
+            "chunks_used": documents,
             "duration_ms": duration,
-            "cached": False,
+            "cached": cache_hit,
             "token_usage": {
                 "prompt_tokens": llm_result["prompt_tokens"],
                 "completion_tokens": llm_result["completion_tokens"],
                 "total_tokens": llm_result["total_tokens"],
             },
+            "sources": [
+                {
+                    "filename": metadata["filename"],
+                    "chunk_index": metadata["chunk_index"],
+                }
+                for metadata in metadatas
+            ],
         }
     except HTTPException:
         raise
