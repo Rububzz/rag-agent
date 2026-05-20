@@ -24,6 +24,11 @@ def query(question: str, top_k: int = 2) -> dict:
     return response.json()
 
 
+def delete_document():
+    response = requests.delete(f"{API_URL}/document")
+    print(response.json())
+
+
 def evaluate(answer: str, expected_keywords: list) -> dict:
     result = {"passed": False, "keywords_found": [], "keywords_missing": []}
     isPassed = True
@@ -39,16 +44,24 @@ def evaluate(answer: str, expected_keywords: list) -> dict:
 
 def main(top_k: int = 2):
     questions = load_questions("scripts/questions.json")
-    upload_document("documents/flower.txt")
+    delete_document()
+    upload_document("documents/Flower - Wikipedia.pdf")
     results = []
     for question in questions:
         query_result = query(question["question"], top_k=top_k)
         eval_result = evaluate(query_result["answer"], question["expected_keywords"])
         eval_result["id"] = question["id"]
         eval_result["question"] = question["question"]
+        eval_result["sources"] = query_result.get("sources", [])
+        eval_result["duration_ms"] = query_result.get("duration_ms")
+        eval_result["token_usage"] = query_result.get("token_usage")
+        eval_result["cached"] = query_result.get("cached")
         results.append(eval_result)
         print(
             f"Q{question['id']}: {'✓' if eval_result['passed'] else '✗'} {question['question'][:50]}"
+            f"\n sources: {eval_result['sources']}"
+            f"\n duration_ms: {eval_result['duration_ms']}"
+            f"\n token_usage: {eval_result['token_usage']}"
         )
 
     passed = sum(1 for r in results if r["passed"])
