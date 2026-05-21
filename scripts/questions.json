@@ -12,7 +12,8 @@
   {
     "id": 2,
     "question": "When did flowers first evolve and in which period?",
-    "expected_keywords": ["150", "190", "jurassic"]
+    "expected_keywords": ["150", "190", "jurassic"],
+    "expected_chunks": [2]
   },
   {
     "id": 3,
@@ -27,7 +28,8 @@
   {
     "id": 5,
     "question": "What is pollination?",
-    "expected_keywords": ["pollen", "male", "female"]
+    "expected_keywords": ["pollen", "male", "female"],
+    "expected_chunks": [21]
   },
   {
     "id": 6,
@@ -47,12 +49,14 @@
   {
     "id": 9,
     "question": "What are two examples of flowers used as spices?",
-    "expected_keywords": ["saffron", "cloves"]
+    "expected_keywords": ["saffron", "cloves"],
+    "expected_chunks": [33]
   },
   {
     "id": 10,
     "question": "What is florigen and what does it do?",
-    "expected_keywords": ["leaves", "flowering", "conditions"]
+    "expected_keywords": ["leaves", "conditions", "flowers"],
+    "expected_chunks": [17]
   },
   {
     "id": 11,
@@ -72,12 +76,14 @@
   {
     "id": 14,
     "question": "Which animals commonly act as pollinators for flowers?",
-    "expected_keywords": ["insects", "birds", "bats"]
+    "expected_keywords": ["insects", "birds", "bats"],
+    "expected_chunks": [19]
   },
   {
     "id": 15,
     "question": "What happens during fertilisation in flowering plants?",
-    "expected_keywords": ["male", "female", "pollen", "egg"]
+    "expected_keywords": ["male", "female", "pollen", "egg"],
+    "expected_chunks": [22]
   },
   {
     "id": 16,
@@ -87,7 +93,8 @@
   {
     "id": 17,
     "question": "Why is seed dispersal important for flowering plants?",
-    "expected_keywords": ["competition", "coloniz"]
+    "expected_keywords": ["competition", "coloniz"],
+    "expected_chunks": [2]
   },
   {
     "id": 18,
@@ -102,6 +109,7 @@
   {
     "id": 20,
     "question": "How have humans used flowers throughout history?",
-    "expected_keywords": ["decoration", "medicine", "food", "perfumes"]
+    "expected_keywords": ["decoration", "medicine", "food", "perfumes"],
+    "expected_chunks": [2, 33]
   }
 ]

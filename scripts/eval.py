@@ -1,5 +1,7 @@
 import json
 import sys
+from pathlib import Path
+from textwrap import indent
 
 import requests
 
@@ -49,10 +51,21 @@ def main(top_k: int = 2):
     results = []
     for question in questions:
         query_result = query(question["question"], top_k=top_k)
+
         eval_result = evaluate(query_result["answer"], question["expected_keywords"])
+        expected_chunks = question.get("expected_chunks")
+        eval_result["expected_chunks"] = expected_chunks
         eval_result["id"] = question["id"]
         eval_result["question"] = question["question"]
         eval_result["sources"] = query_result.get("sources", [])
+        retrieved_chunks = [source["chunk_index"] for source in eval_result["sources"]]
+        eval_result["retrieved_chunks"] = retrieved_chunks
+        if expected_chunks is not None:
+            eval_result["retrieval_hit"] = any(
+                chunk in retrieved_chunks for chunk in expected_chunks
+            )
+        else:
+            eval_result["retrieval_hit"] = None
         eval_result["duration_ms"] = query_result.get("duration_ms")
         eval_result["token_usage"] = query_result.get("token_usage")
         eval_result["cached"] = query_result.get("cached")
@@ -62,12 +75,53 @@ def main(top_k: int = 2):
             f"\n sources: {eval_result['sources']}"
             f"\n duration_ms: {eval_result['duration_ms']}"
             f"\n token_usage: {eval_result['token_usage']}"
+            f"\n retrieved_chunks: {retrieved_chunks}"
+            f"\n expected_chunks: {expected_chunks}"
+            f"\n retrieval_hit: {eval_result['retrieval_hit']}"
         )
 
+    durations = [r["duration_ms"] for r in results]
+    tokens = [r["token_usage"]["total_tokens"] for r in results]
+    average_duration_ms = sum(durations) / len(durations)
+    average_total_tokens = sum(tokens) / len(tokens)
     passed = sum(1 for r in results if r["passed"])
     print(f"\n=== EVAL SUMMARY ===")
     print(f"Score: {passed}/{len(results)}")
     print(f"Pass rate: {round(passed/len(results)*100)}%")
+    print(f"\n average_duration_ms: {average_duration_ms} ")
+    print(f"\n average_total_tokens: {average_total_tokens}")
+
+    retrieval_result = [r for r in results if r["retrieval_hit"] is not None]
+    print(f"\n=== Retrieval Hit Rate===")
+    if retrieval_result:
+        retrieval_hit = sum(1 for r in retrieval_result if r["retrieval_hit"])
+        retrieval_hit_rate = round(retrieval_hit / len(retrieval_result) * 100)
+        print(f"\n Retrieval Hit Rate: {retrieval_hit_rate}%")
+        print(f"\n Retrieval Hit:{retrieval_hit} / {len(retrieval_result)}")
+    else:
+        retrieval_hit_rate = None
+        print(f"\n Retrieval Hit Rate: N/A")
+
+    failed_results = [r for r in results if not r["passed"]]
+    print(f"\n === Failed Results")
+    for fr in failed_results:
+        print(f"Q{fr['id']}:{fr['question']}")
+        print(f"Missing Keywords:{fr['keywords_missing']}")
+
+    output = {
+        "top_k": top_k,
+        "pass_rate": round(passed / len(results) * 100),
+        "retrieval_hit_rate": retrieval_hit_rate,
+        "average_duration_ms": average_duration_ms,
+        "average_total_tokens": average_total_tokens,
+        "results": results,
+    }
+    outputdir = Path("eval_results")
+    outputdir.mkdir(exist_ok=True)
+    output_path = outputdir / f"top_{top_k}.json"
+    with open(output_path, "w") as f:
+        json.dump(output, f, indent=4)
+    print(f"Saved eval results to {output_path}")
 
 
 if __name__ == "__main__":

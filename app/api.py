@@ -1,5 +1,6 @@
 import logging
 import time
+from fileinput import filename
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pydantic import BaseModel
@@ -110,6 +111,40 @@ def health():
         "status": "ok",
         "current time": time.time(),
     }
+
+
+@app.post("/retrieve")
+def retrieve(req: QueryRequest):
+    try:
+        cache_result = get_cached(req.question, req.top_k)
+        if cache_result is None:
+            content = search(req.question, req.top_k)
+            documents = content["documents"]
+            metadatas = content["metadatas"]
+            if not documents or all(d.strip() == "" for d in documents):
+                raise HTTPException(
+                    status_code=400, detail="No document found. Please upload document"
+                )
+            cache_result = {"documents": documents, "metadatas": metadatas}
+            set_cached(req.question, req.top_k, cache_result)
+        documents = cache_result["documents"]
+        metadatas = cache_result["metadatas"]
+        return {
+            "question": req.question,
+            "sources": [
+                {
+                    "filename": metadata["filename"],
+                    "chunk_index": metadata["chunk_index"],
+                    "text": doc,
+                }
+                for doc, metadata in zip(documents, metadatas)
+            ],
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Retrieve failed with {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.delete("/document")

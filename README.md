@@ -1,83 +1,81 @@
-## Overview
+# RAG Agent
 
-This project is a Retrieval-Augmented Generation (RAG) API built to minimise LLM hallucinations by grounding answers strictly in uploaded documents. When a user uploads a document, it is chunked, embedded, and stored in a ChromaDB vector database. When a question is asked, the API retrieves the most semantically similar chunks and passes them as context to the LLM (via Groq), ensuring answers are based only on the provided documents and not the model's general knowledge.
+A Retrieval-Augmented Generation (RAG) system built with FastAPI, ChromaDB, Redis, and SentenceTransformers for grounded document question answering.
 
-Built to learn Python, FastAPI, and core RAG engineering concepts from scratch..
+The project focuses on retrieval quality, evaluation, and engineering tradeoffs in RAG systems. It includes automated benchmarking for answer accuracy, retrieval hit rate, latency, token usage, and query phrasing robustness.
+
+---
+
+## Features
+
+- PDF and text document ingestion
+- Overlap-aware chunking
+- SentenceTransformer embeddings (`all-MiniLM-L6-v2`)
+- Persistent ChromaDB vector storage
+- Redis retrieval-context caching
+- Source citations with chunk metadata
+- Retrieval-only inspection endpoint
+- Automated evaluation pipeline
+- Retrieval hit rate benchmarking
+- Query phrasing robustness evaluation
+- Latency and token usage tracking
+- Dockerized local development setup
+
+---
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    Client-->|HTTP Request|FastAPI
-    FastAPI-->|Check Cache|Redis
-    Redis-->|Cache Hit|FastAPI
-    FastAPI-->|Cache Miss|ChromaDB
-    ChromaDB-->|Relevant Chunks|FastAPI
-    FastAPI-->|Question + Context|Groq
-    Groq-->|Answer|FastAPI
-    FastAPI-->|Store Answer|Redis
-    FastAPI-->|HTTP Response|Client
+    A[Upload Document] --> B[Extract Text]
+    B --> C[Chunking with Overlap]
+    C --> D[Generate Embeddings]
+    D --> E[Store in ChromaDB]
+
+    F[User Question] --> G[Redis Retrieval Cache]
+    G -->|Cache Miss| H[ChromaDB Similarity Search]
+    G -->|Cache Hit| I[Retrieved Chunks + Metadata]
+    H --> I
+
+    I --> J[Build Context]
+    J --> K[Groq LLM]
+    K --> L[Answer + Citations]
 ```
 
-## How to Run
+---
 
-1. Clone the repository
-   git clone https://github.com/Rububzz/rag-agent.git
-   cd rag-agent
+## Evaluation Pipeline
 
-2. Create a `.env` file in the root folder with your Groq API key
-   GROQ_API_KEY=your-key-here
+The system includes an automated evaluation pipeline measuring:
 
-3. Start the server
-   docker compose up
+- Answer keyword accuracy
+- Retrieval hit rate
+- Query phrasing robustness
+- Average latency
+- Average token usage
 
-4. The API will be available at http://localhost:8000
-   Visit http://localhost:8000/docs for the interactive API explorer
+### Retrieval Hit Rate
 
-## API Endpoints
+Retrieval hit rate measures whether the retriever successfully returned the expected evidence chunk for a question.
 
-### GET /health
+This separates:
 
-Check if the server is running.
+- retrieval failures
+- generation failures
+- evaluation strictness issues
 
-- **Returns:** `{"status": "ok", "current time": ...}`
-- **Test:** `curl http://localhost:8000/health`
+For example:
 
-### POST /upload
+- If retrieval hit rate is high but answer accuracy is low, the issue is likely generation or evaluation wording.
+- If retrieval hit rate is low, the issue is likely retrieval quality, chunking, or search configuration.
 
-Upload a document to the knowledge base.
+---
 
-- **Accepts:** `.txt` file
-- **Returns:** `{"message": "Uploaded and indexed N chunks", "duration_ms": ...}`
-- **Test:** `curl -X POST http://localhost:8000/upload -F "file=@sample.txt"`
+## Current Benchmark Results
 
-### POST /query
+### Chunk Size Evaluation
 
-Ask a question against uploaded documents.
-
-- **Accepts:** `{"question": "your question here"}`
-- **Returns:** `{"question": ..., "answer": ..., "chunks_used": ..., "duration_ms": ...}`
-- **Note:** Returns 400 if no documents have been uploaded
-- **Test:** `curl -X POST http://localhost:8000/query -H "Content-Type: application/json" -d '{"question": "How does RAG work?"}'`
-
-## What I learnt
-
-1. Precision vs Context
-   - Precision = How much of the retrieved text is actually relevant to the user’s question?
-   - Context = How much surrounding information is preserved in each chunk for the LLM to understand the answer
-2. How chunking affects precision and context
-   - **Small**: More precise but loses context
-   - **Big**: More context but precision suffers
-3. Vector Database Querying
-   - How embedding creates vectors and the database is able to find semantically similar embedded text to return as context
-4. Query phrasing affects retrieval quality
-   - When "How does RAG work?" returned photosynthesis as the second result but the longer query returned correct results
-5. Error handling matters
-   - When ChromaDB was empty the LLM hallucinated a confident answer instead of saying it didn't know, which is why validation is critical in RAG systems
-
-## Benchmarks
-
-### Chunk Size (averaged over 3 runs)
+Average over 3 runs.
 
 | Chunk Size | Avg Score | Avg Pass Rate |
 | ---------- | --------- | ------------- |
@@ -85,9 +83,11 @@ Ask a question against uploaded documents.
 | 100 words  | 15.3/20   | 77%           |
 | 200 words  | 15/20     | 75%           |
 
-Note: Results vary slightly between runs due to LLM non-determinism. Each configuration was averaged over 3 runs for stability.
+Smaller chunks improved precision but often lost important context. Larger chunks preserved context but occasionally reduced retrieval specificity.
 
-### Top-K Retrieval
+---
+
+### Top-K Retrieval Evaluation
 
 | Top-K | Score | Pass Rate |
 | ----- | ----- | --------- |
@@ -96,9 +96,34 @@ Note: Results vary slightly between runs due to LLM non-determinism. Each config
 | k=3   | 16/20 | 80%       |
 | k=5   | 17/20 | 85%       |
 
-k=2 is the optimal value — matches k=5 performance at 85% while using less context, resulting in lower latency and fewer tokens. k=1 is insufficient context at 65%. Default set to k=2.
+`k=2` provided the best tradeoff between answer quality, latency, and token usage for the current evaluation dataset.
 
-### Query Phrasing
+Higher `top_k` values improved retrieval coverage in some cases, but increased latency and prompt token usage.
+
+---
+
+### Retrieval Evaluation
+
+| Metric             | Result                      |
+| ------------------ | --------------------------- |
+| Retrieval Hit Rate | 100% (5 labelled questions) |
+
+The retrieval evaluation compares retrieved chunk indices against manually labelled evidence chunks.
+
+Example:
+
+```json
+{
+  "question": "What is pollination?",
+  "expected_chunks": [21]
+}
+```
+
+This allows retrieval quality to be evaluated independently from generation quality.
+
+---
+
+### Query Phrasing Robustness
 
 | Question                    | Short | Medium | Descriptive |
 | --------------------------- | ----- | ------ | ----------- |
@@ -108,13 +133,218 @@ k=2 is the optimal value — matches k=5 performance at 85% while using less con
 | Q15 — fertilisation         | ✗     | ✗      | ✗           |
 | Q16 — ovary structures      | ✗     | ✓      | ✗           |
 
-Query phrasing significantly affects retrieval quality. Longer queries don't always improve results — Q4 showed that over-specifying degraded retrieval. Q15 failed across all phrasings, indicating a genuine retrieval gap where the relevant chunk is not being retrieved regardless of query formulation. Optimal phrasing depends on document structure and embedding model behaviour.
+Query phrasing significantly affected retrieval quality.
 
-### Redis Caching
+Some questions improved with additional context, while others degraded when over-specified.
 
-| Query Type     | Average Latency |
-| -------------- | --------------- |
-| Uncached (LLM) | ~1885ms         |
-| Cached         | ~1ms            |
+Q15 initially failed because the correct fertilisation chunk was not retrieved at low `top_k` values. Increasing `top_k` improved retrieval quality but increased latency and token usage.
 
-Implemented Redis caching to store LLM responses. Cache is invalidated on every document upload or delete, ensuring answers always reflect the current document. Repeated queries are served from cache at ~1ms vs ~1885ms uncached — a 99.9% latency reduction.
+---
+
+### Redis Retrieval Cache
+
+| Query Type               | Average Latency         |
+| ------------------------ | ----------------------- |
+| Uncached Retrieval + LLM | ~1885ms                 |
+| Cached Retrieval Context | ~1ms retrieval overhead |
+
+Redis is used to cache retrieved context and metadata.
+
+This preserves:
+
+- citations
+- retrieval provenance
+- chunk metadata
+
+while avoiding repeated vector retrieval work.
+
+The cache is invalidated whenever documents are uploaded or deleted.
+
+---
+
+## Retrieval-Only Endpoint
+
+The project includes a retrieval-only endpoint:
+
+```http
+POST /retrieve
+```
+
+This endpoint returns:
+
+- retrieved chunks
+- source metadata
+- chunk indices
+
+without calling the LLM.
+
+This allows retrieval debugging and evaluation without consuming LLM tokens.
+
+Example:
+
+```json
+{
+  "question": "What is pollination?",
+  "sources": [
+    {
+      "filename": "Flower - Wikipedia.pdf",
+      "chunk_index": 21,
+      "text": "..."
+    }
+  ]
+}
+```
+
+---
+
+## Failure Analysis
+
+Observed failure categories include:
+
+- retrieval misses at low `top_k` values
+- keyword evaluation strictness
+- paraphrased answers missing expected keywords
+- incomplete evidence retrieval
+
+Example:
+
+- Q15 initially failed because the correct fertilisation chunk was not retrieved at `top_k=2`
+- Increasing `top_k=5` successfully retrieved the relevant chunk
+- This improved retrieval quality but increased latency and prompt token usage
+
+---
+
+## What I Learned
+
+### Precision vs Context
+
+- Precision = how much retrieved text is actually relevant to the question
+- Context = how much surrounding information is preserved for the LLM
+
+### Chunk Size Tradeoffs
+
+- Smaller chunks improve precision but lose context
+- Larger chunks preserve context but may reduce retrieval specificity
+
+### Query Phrasing Affects Retrieval
+
+Semantically similar questions can retrieve different chunks depending on wording and embedding behavior.
+
+### Retrieval and Generation Should Be Evaluated Separately
+
+A correct retrieval result can still produce a failed answer due to:
+
+- generation issues
+- evaluation strictness
+- missing keywords
+
+### Retrieval Caching Architecture Matters
+
+Caching retrieval context instead of final answers preserves:
+
+- citations
+- metadata
+- retrieval provenance
+
+while still avoiding repeated vector search work.
+
+---
+
+## Running the Project
+
+### Clone the repository
+
+```bash
+git clone https://github.com/Rububzz/rag-agent.git
+cd rag-agent
+```
+
+### Create `.env`
+
+```env
+GROQ_API_KEY=your-key-here
+```
+
+### Start the application
+
+```bash
+docker compose up
+```
+
+The API will be available at:
+
+```text
+http://localhost:8000
+```
+
+Interactive API docs:
+
+```text
+http://localhost:8000/docs
+```
+
+---
+
+## API Endpoints
+
+### `GET /health`
+
+Check whether the API is running.
+
+---
+
+### `POST /upload`
+
+Upload a document into the vector database.
+
+Supports:
+
+- `.txt`
+- `.pdf`
+
+Returns:
+
+- indexed chunk count
+- upload duration
+
+---
+
+### `POST /query`
+
+Ask questions against uploaded documents.
+
+Returns:
+
+- generated answer
+- retrieved chunks
+- source citations
+- latency
+- token usage
+
+---
+
+### `POST /retrieve`
+
+Retrieval-only endpoint.
+
+Returns retrieved chunks and metadata without calling the LLM.
+
+Useful for:
+
+- retrieval debugging
+- evaluation
+- failure analysis
+- retrieval benchmarking
+
+---
+
+## Future Improvements
+
+- Cross-encoder reranking
+- Hybrid BM25 + vector retrieval
+- Query rewriting
+- Retrieval confidence scoring
+- LLM-as-a-judge evaluation
+- Streaming responses
+- Multi-document retrieval filtering
+- Retrieval dashboards and experiment tracking
