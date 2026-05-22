@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 CHROMA_PATH = Path("./chroma_data")
 COLLECTION_NAME = "documents"
+PREVIEW_SIZE = 20
 
 client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 
@@ -26,7 +27,11 @@ def add_documents(chunks: list[str], filename: str):
                 embeddings=[embed(chunk)],
                 documents=[chunk],
                 metadatas=[
-                    {"filename": filename, "chunk_index": i, "preview": chunk[:20]}
+                    {
+                        "filename": filename,
+                        "chunk_index": i,
+                        "preview": chunk[:PREVIEW_SIZE],
+                    }
                 ],
             )
         logger.info(f"Added {len(chunks)} chunks to ChromaDB")
