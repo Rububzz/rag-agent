@@ -26,10 +26,7 @@ def add_documents(chunks: list[str], filename: str):
                 embeddings=[embed(chunk)],
                 documents=[chunk],
                 metadatas=[
-                    {
-                        "filename": filename,
-                        "chunk_index": i,
-                    }
+                    {"filename": filename, "chunk_index": i, "preview": chunk[:20]}
                 ],
             )
         logger.info(f"Added {len(chunks)} chunks to ChromaDB")

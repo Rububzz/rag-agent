@@ -1,6 +1,5 @@
 import logging
 import time
-from fileinput import filename
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pydantic import BaseModel
@@ -9,6 +8,7 @@ from app.cache import clear_cache, get_cached, set_cached
 from app.chunker import chunk_text
 from app.llm import ask
 from app.parser import extract_text
+from app.reranker import rerank
 from app.retriever import add_documents, delete_document, search
 
 app = FastAPI()
@@ -21,7 +21,9 @@ logger = logging.getLogger(__name__)
 
 class QueryRequest(BaseModel):
     question: str
-    top_k: int = 2
+    search_k: int = 10
+    rerank_top_k: int = 2
+    use_rerank: bool = False
 
 
 @app.post("/upload")
@@ -51,24 +53,30 @@ async def upload(file: UploadFile = File(...)):
 def query(req: QueryRequest):
     start = time.time()
     try:
-        cache_result = get_cached(req.question, req.top_k)
+        cache_result = get_cached(req.question, req.search_k)
         cache_hit = cache_result is not None
         if not cache_hit:
-            results = search(req.question, n=req.top_k)
-            documents = results["documents"]
-            metadatas = results["metadatas"]
-            if not documents or all(d.strip() == "" for d in documents):
+            results = search(req.question, n=req.search_k)
+            search_documents = results["documents"]
+            search_metadatas = results["metadatas"]
+            if not search_documents or all(d.strip() == "" for d in search_documents):
                 raise HTTPException(
                     status_code=400,
                     detail="No document found. Please upload a document",
                 )
             cache_result = {
-                "documents": documents,
-                "metadatas": metadatas,
+                "documents": search_documents,
+                "metadatas": search_metadatas,
             }
-            set_cached(req.question, req.top_k, cache_result)
-        documents = cache_result["documents"]
-        metadatas = cache_result["metadatas"]
+            set_cached(req.question, req.search_k, cache_result)
+        if req.use_rerank:
+            reranked_result = rerank(req.question, cache_result, req.rerank_top_k)
+            documents = reranked_result["documents"]
+            metadatas = reranked_result["metadatas"]
+        else:
+            documents = cache_result["documents"][: req.rerank_top_k]
+            metadatas = cache_result["metadatas"][: req.rerank_top_k]
+
         context = "\n\n".join(
             f"[Source {i + 1}: {metadata['filename']} | chunk {metadata['chunk_index']}]\n{doc}"
             for i, (doc, metadata) in enumerate(zip(documents, metadatas))
@@ -94,6 +102,7 @@ def query(req: QueryRequest):
                 {
                     "filename": metadata["filename"],
                     "chunk_index": metadata["chunk_index"],
+                    "preview": metadata["preview"],
                 }
                 for metadata in metadatas
             ],
@@ -116,25 +125,34 @@ def health():
 @app.post("/retrieve")
 def retrieve(req: QueryRequest):
     try:
-        cache_result = get_cached(req.question, req.top_k)
+        cache_result = get_cached(req.question, req.search_k)
         if cache_result is None:
-            content = search(req.question, req.top_k)
-            documents = content["documents"]
-            metadatas = content["metadatas"]
-            if not documents or all(d.strip() == "" for d in documents):
+            content = search(req.question, req.search_k)
+            search_documents = content["documents"]
+            search_metadatas = content["metadatas"]
+            if not search_documents or all(d.strip() == "" for d in search_documents):
                 raise HTTPException(
                     status_code=400, detail="No document found. Please upload document"
                 )
-            cache_result = {"documents": documents, "metadatas": metadatas}
-            set_cached(req.question, req.top_k, cache_result)
-        documents = cache_result["documents"]
-        metadatas = cache_result["metadatas"]
+            cache_result = {
+                "documents": search_documents,
+                "metadatas": search_metadatas,
+            }
+            set_cached(req.question, req.search_k, cache_result)
+        if req.use_rerank:
+            reranked_result = rerank(req.question, cache_result, req.rerank_top_k)
+            documents = reranked_result["documents"]
+            metadatas = reranked_result["metadatas"]
+        else:
+            documents = cache_result["documents"][: req.rerank_top_k]
+            metadatas = cache_result["metadatas"][: req.rerank_top_k]
         return {
             "question": req.question,
             "sources": [
                 {
                     "filename": metadata["filename"],
                     "chunk_index": metadata["chunk_index"],
+                    "preview": metadata["preview"],
                     "text": doc,
                 }
                 for doc, metadata in zip(documents, metadatas)

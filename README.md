@@ -189,7 +189,8 @@ Example:
     {
       "filename": "Flower - Wikipedia.pdf",
       "chunk_index": 21,
-      "text": "..."
+      "text": "...",
+      "preview": "Inside the Flower ..."
     }
   ]
 }
