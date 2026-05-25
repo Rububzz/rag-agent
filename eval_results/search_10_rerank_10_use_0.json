@@ -1,0 +1,1707 @@
+{
+    "search_k": 10,
+    "rerank_top_k": 10,
+    "use_rerank": false,
+    "pass_rate": 90,
+    "retrieval_hit_rate": 100,
+    "average_duration_ms": 15222.05,
+    "average_total_tokens": 3631.05,
+    "results": [
+        {
+            "passed": false,
+            "keywords_found": [
+                "petals"
+            ],
+            "keywords_missing": [
+                "protective leaves",
+                "male parts",
+                "female parts"
+            ],
+            "expected_chunks": null,
+            "id": 1,
+            "question": "What are the four main whorls of a flower?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 9,
+                    "preview": "Inside the ovary, th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 8,
+                    "preview": "3: Connective (condu"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 5,
+                    "preview": "from genetically dis"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 6,
+                    "preview": "of calyx (the modifi"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 12,
+                    "preview": "different \ufb02owers, an"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 34,
+                    "preview": "demand has led to th"
+                }
+            ],
+            "retrieved_chunks": [
+                9,
+                8,
+                5,
+                0,
+                7,
+                3,
+                16,
+                6,
+                12,
+                34
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 1196,
+            "token_usage": {
+                "prompt_tokens": 3288,
+                "completion_tokens": 125,
+                "total_tokens": 3413
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "150",
+                "190",
+                "jurassic"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                2
+            ],
+            "id": 2,
+            "question": "When did flowers first evolve and in which period?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 2,
+                    "preview": "aid in its dispersal"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 26,
+                    "preview": "vectors include livi"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 31,
+                    "preview": "in that context.[135"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 34,
+                    "preview": "demand has led to th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 30,
+                    "preview": "morphology of plants"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 36,
+                    "preview": "has \ufb01ve fused petals"
+                }
+            ],
+            "retrieved_chunks": [
+                2,
+                26,
+                27,
+                3,
+                31,
+                34,
+                28,
+                30,
+                0,
+                36
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 472,
+            "token_usage": {
+                "prompt_tokens": 3383,
+                "completion_tokens": 20,
+                "total_tokens": 3403
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "different",
+                "same plant",
+                "same flower"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 3,
+            "question": "What is the difference between cross-pollination and self-pollination?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 18,
+                    "preview": "changes.[75] Diagram"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 21,
+                    "preview": "much less commonly, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 1,
+                    "preview": "male sex cells, is t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 35,
+                    "preview": "example, are mostly "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                }
+            ],
+            "retrieved_chunks": [
+                18,
+                20,
+                21,
+                19,
+                4,
+                0,
+                28,
+                1,
+                35,
+                7
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 811,
+            "token_usage": {
+                "prompt_tokens": 3256,
+                "completion_tokens": 162,
+                "total_tokens": 3418
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "pollen",
+                "ovules",
+                "carpels"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 4,
+            "question": "What is the function of the gynoecium?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 8,
+                    "preview": "3: Connective (condu"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 22,
+                    "preview": "depositing of sperm "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 23,
+                    "preview": "much of the jelly-li"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 1,
+                    "preview": "male sex cells, is t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 5,
+                    "preview": "from genetically dis"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 9,
+                    "preview": "Inside the ovary, th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 54,
+                    "preview": "dell death in \ufb02oral "
+                }
+            ],
+            "retrieved_chunks": [
+                8,
+                22,
+                23,
+                0,
+                1,
+                7,
+                5,
+                9,
+                16,
+                54
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 9003,
+            "token_usage": {
+                "prompt_tokens": 3603,
+                "completion_tokens": 97,
+                "total_tokens": 3700
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "pollen",
+                "male",
+                "female"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                21
+            ],
+            "id": 5,
+            "question": "What is pollination?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 21,
+                    "preview": "much less commonly, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 18,
+                    "preview": "changes.[75] Diagram"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 1,
+                    "preview": "male sex cells, is t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 43,
+                    "preview": "1993, p. 285. 156. C"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                }
+            ],
+            "retrieved_chunks": [
+                21,
+                20,
+                18,
+                19,
+                1,
+                0,
+                7,
+                43,
+                29,
+                28
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 19038,
+            "token_usage": {
+                "prompt_tokens": 3728,
+                "completion_tokens": 82,
+                "total_tokens": 3810
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "attract",
+                "pollinators",
+                "nectar"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 6,
+            "question": "How do flower colours attract pollinators?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 14,
+                    "preview": "colours, provide dif"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 21,
+                    "preview": "much less commonly, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 18,
+                    "preview": "changes.[75] Diagram"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 1,
+                    "preview": "male sex cells, is t"
+                }
+            ],
+            "retrieved_chunks": [
+                20,
+                14,
+                28,
+                21,
+                0,
+                18,
+                19,
+                29,
+                7,
+                1
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 18388,
+            "token_usage": {
+                "prompt_tokens": 3225,
+                "completion_tokens": 163,
+                "total_tokens": 3388
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "cluster",
+                "flowers"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 7,
+            "question": "What is an inflorescence?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 12,
+                    "preview": "different \ufb02owers, an"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 14,
+                    "preview": "colours, provide dif"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 31,
+                    "preview": "in that context.[135"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 13,
+                    "preview": "formula is a way to "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 17,
+                    "preview": "reproductive success"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 9,
+                    "preview": "Inside the ovary, th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                }
+            ],
+            "retrieved_chunks": [
+                12,
+                0,
+                14,
+                31,
+                13,
+                3,
+                7,
+                17,
+                9,
+                20
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 15274,
+            "token_usage": {
+                "prompt_tokens": 3196,
+                "completion_tokens": 88,
+                "total_tokens": 3284
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "genes",
+                "petals",
+                "development"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 8,
+            "question": "What is the ABC model of flower development?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 15,
+                    "preview": "and buds. The organs"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 17,
+                    "preview": "reproductive success"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 47,
+                    "preview": "PMID 38002124 (https"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 5,
+                    "preview": "from genetically dis"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 14,
+                    "preview": "colours, provide dif"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                }
+            ],
+            "retrieved_chunks": [
+                15,
+                16,
+                17,
+                47,
+                0,
+                5,
+                14,
+                27,
+                29,
+                20
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 19545,
+            "token_usage": {
+                "prompt_tokens": 3610,
+                "completion_tokens": 186,
+                "total_tokens": 3796
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "saffron",
+                "cloves"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                33
+            ],
+            "id": 9,
+            "question": "What are two examples of flowers used as spices?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 33,
+                    "preview": "decoctions because t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 32,
+                    "preview": "wild thyme blows, Wh"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 31,
+                    "preview": "in that context.[135"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 34,
+                    "preview": "demand has led to th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 2,
+                    "preview": "aid in its dispersal"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 47,
+                    "preview": "PMID 38002124 (https"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 9,
+                    "preview": "Inside the ovary, th"
+                }
+            ],
+            "retrieved_chunks": [
+                33,
+                32,
+                31,
+                34,
+                2,
+                3,
+                20,
+                4,
+                47,
+                9
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 17807,
+            "token_usage": {
+                "prompt_tokens": 3648,
+                "completion_tokens": 33,
+                "total_tokens": 3681
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "leaves",
+                "conditions",
+                "flowers"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                17
+            ],
+            "id": 10,
+            "question": "What is florigen and what does it do?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 17,
+                    "preview": "reproductive success"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 32,
+                    "preview": "wild thyme blows, Wh"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 12,
+                    "preview": "different \ufb02owers, an"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 31,
+                    "preview": "in that context.[135"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 13,
+                    "preview": "formula is a way to "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 14,
+                    "preview": "colours, provide dif"
+                }
+            ],
+            "retrieved_chunks": [
+                17,
+                3,
+                32,
+                4,
+                12,
+                7,
+                31,
+                0,
+                13,
+                14
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 15966,
+            "token_usage": {
+                "prompt_tokens": 3199,
+                "completion_tokens": 66,
+                "total_tokens": 3265
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "protect",
+                "flower",
+                "fruit"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 11,
+            "question": "What are the functions of sepals in a flower?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 6,
+                    "preview": "of calyx (the modifi"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 9,
+                    "preview": "Inside the ovary, th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 5,
+                    "preview": "from genetically dis"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 15,
+                    "preview": "and buds. The organs"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 13,
+                    "preview": "formula is a way to "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 14,
+                    "preview": "colours, provide dif"
+                }
+            ],
+            "retrieved_chunks": [
+                6,
+                9,
+                0,
+                7,
+                16,
+                5,
+                15,
+                13,
+                4,
+                14
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 17285,
+            "token_usage": {
+                "prompt_tokens": 3179,
+                "completion_tokens": 180,
+                "total_tokens": 3359
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "attract",
+                "pollinators"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 12,
+            "question": "What role do petals play in pollination?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 21,
+                    "preview": "much less commonly, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 18,
+                    "preview": "changes.[75] Diagram"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 1,
+                    "preview": "male sex cells, is t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 5,
+                    "preview": "from genetically dis"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                }
+            ],
+            "retrieved_chunks": [
+                0,
+                20,
+                21,
+                18,
+                1,
+                7,
+                19,
+                28,
+                5,
+                29
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 17324,
+            "token_usage": {
+                "prompt_tokens": 3244,
+                "completion_tokens": 126,
+                "total_tokens": 3370
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "living",
+                "wind",
+                "water"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 13,
+            "question": "What is the difference between biotic and abiotic pollination?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 43,
+                    "preview": "1993, p. 285. 156. C"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 21,
+                    "preview": "much less commonly, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 18,
+                    "preview": "changes.[75] Diagram"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 56,
+                    "preview": "and chemistry of pol"
+                }
+            ],
+            "retrieved_chunks": [
+                43,
+                19,
+                20,
+                21,
+                29,
+                18,
+                28,
+                0,
+                4,
+                56
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 21662,
+            "token_usage": {
+                "prompt_tokens": 4208,
+                "completion_tokens": 255,
+                "total_tokens": 4463
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "insects",
+                "birds",
+                "bats"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                19
+            ],
+            "id": 14,
+            "question": "Which animals commonly act as pollinators for flowers?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 21,
+                    "preview": "much less commonly, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 18,
+                    "preview": "changes.[75] Diagram"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 35,
+                    "preview": "example, are mostly "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                }
+            ],
+            "retrieved_chunks": [
+                20,
+                19,
+                21,
+                28,
+                18,
+                29,
+                0,
+                35,
+                27,
+                7
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 18011,
+            "token_usage": {
+                "prompt_tokens": 3322,
+                "completion_tokens": 141,
+                "total_tokens": 3463
+            },
+            "cached": false
+        },
+        {
+            "passed": false,
+            "keywords_found": [
+                "pollen",
+                "egg"
+            ],
+            "keywords_missing": [
+                "male",
+                "female"
+            ],
+            "expected_chunks": [
+                22
+            ],
+            "id": 15,
+            "question": "What happens during fertilisation in flowering plants?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 22,
+                    "preview": "depositing of sperm "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 24,
+                    "preview": "as an energy store. "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 1,
+                    "preview": "male sex cells, is t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 15,
+                    "preview": "and buds. The organs"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 23,
+                    "preview": "much of the jelly-li"
+                }
+            ],
+            "retrieved_chunks": [
+                0,
+                16,
+                7,
+                22,
+                24,
+                4,
+                1,
+                15,
+                27,
+                23
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 16171,
+            "token_usage": {
+                "prompt_tokens": 3111,
+                "completion_tokens": 254,
+                "total_tokens": 3365
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "fruit"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 16,
+            "question": "What structures develop from the ovary after fertilisation?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 22,
+                    "preview": "depositing of sperm "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 8,
+                    "preview": "3: Connective (condu"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 7,
+                    "preview": "to encourage and fac"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 9,
+                    "preview": "Inside the ovary, th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 23,
+                    "preview": "much of the jelly-li"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 5,
+                    "preview": "from genetically dis"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 24,
+                    "preview": "as an energy store. "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 49,
+                    "preview": "Friis, Else Marie; D"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                }
+            ],
+            "retrieved_chunks": [
+                22,
+                8,
+                7,
+                9,
+                23,
+                5,
+                24,
+                16,
+                49,
+                27
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 18932,
+            "token_usage": {
+                "prompt_tokens": 3694,
+                "completion_tokens": 86,
+                "total_tokens": 3780
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "competition",
+                "coloniz"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                2
+            ],
+            "id": 17,
+            "question": "Why is seed dispersal important for flowering plants?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 2,
+                    "preview": "aid in its dispersal"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 25,
+                    "preview": "and the stone, or in"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 28,
+                    "preview": "allowed the angiospe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 16,
+                    "preview": "hold in most floweri"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 19,
+                    "preview": "Colibri thalassinus,"
+                }
+            ],
+            "retrieved_chunks": [
+                2,
+                27,
+                20,
+                29,
+                25,
+                4,
+                28,
+                16,
+                0,
+                19
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 16875,
+            "token_usage": {
+                "prompt_tokens": 3113,
+                "completion_tokens": 58,
+                "total_tokens": 3171
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "monoecious",
+                "dioecious",
+                "same plant"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 18,
+            "question": "What is the difference between monoecious and dioecious plants?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 11,
+                    "preview": "of plants, the flowe"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 35,
+                    "preview": "example, are mostly "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 12,
+                    "preview": "different \ufb02owers, an"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 20,
+                    "preview": "raise their young, a"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 0,
+                    "preview": "From left to right, "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 48,
+                    "preview": "PMID 36212342 (http "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 47,
+                    "preview": "PMID 38002124 (https"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 53,
+                    "preview": "Huds. (Orchidaceae),"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 36,
+                    "preview": "has \ufb01ve fused petals"
+                }
+            ],
+            "retrieved_chunks": [
+                11,
+                35,
+                12,
+                20,
+                29,
+                0,
+                48,
+                47,
+                53,
+                36
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 24360,
+            "token_usage": {
+                "prompt_tokens": 4866,
+                "completion_tokens": 201,
+                "total_tokens": 5067
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "morphology",
+                "classify",
+                "taxonomy"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": null,
+            "id": 19,
+            "question": "Why are flowers important in plant taxonomy?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 30,
+                    "preview": "morphology of plants"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 2,
+                    "preview": "aid in its dispersal"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 31,
+                    "preview": "in that context.[135"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 29,
+                    "preview": "pollinator rewards ("
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 34,
+                    "preview": "demand has led to th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 4,
+                    "preview": "to mean \"ground grai"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 33,
+                    "preview": "decoctions because t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 13,
+                    "preview": "formula is a way to "
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                }
+            ],
+            "retrieved_chunks": [
+                30,
+                2,
+                31,
+                3,
+                29,
+                34,
+                4,
+                33,
+                13,
+                27
+            ],
+            "retrieval_hit": null,
+            "duration_ms": 17707,
+            "token_usage": {
+                "prompt_tokens": 3171,
+                "completion_tokens": 258,
+                "total_tokens": 3429
+            },
+            "cached": false
+        },
+        {
+            "passed": true,
+            "keywords_found": [
+                "decoration",
+                "medicine",
+                "food",
+                "perfumes"
+            ],
+            "keywords_missing": [],
+            "expected_chunks": [
+                2,
+                33
+            ],
+            "id": 20,
+            "question": "How have humans used flowers throughout history?",
+            "sources": [
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 2,
+                    "preview": "aid in its dispersal"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 33,
+                    "preview": "decoctions because t"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 31,
+                    "preview": "in that context.[135"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 34,
+                    "preview": "demand has led to th"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 32,
+                    "preview": "wild thyme blows, Wh"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 59,
+                    "preview": "Journal of Contempor"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 27,
+                    "preview": "other changes happen"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 47,
+                    "preview": "PMID 38002124 (https"
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 3,
+                    "preview": "inch) to 1 metre (3."
+                },
+                {
+                    "filename": "Flower - Wikipedia.pdf",
+                    "chunk_index": 30,
+                    "preview": "morphology of plants"
+                }
+            ],
+            "retrieved_chunks": [
+                2,
+                33,
+                31,
+                34,
+                32,
+                59,
+                27,
+                47,
+                3,
+                30
+            ],
+            "retrieval_hit": true,
+            "duration_ms": 18614,
+            "token_usage": {
+                "prompt_tokens": 3642,
+                "completion_tokens": 354,
+                "total_tokens": 3996
+            },
+            "cached": false
+        }
+    ]
+}

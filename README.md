@@ -33,13 +33,19 @@ flowchart TD
     D --> E[Store in ChromaDB]
 
     F[User Question] --> G[Redis Retrieval Cache]
-    G -->|Cache Miss| H[ChromaDB Similarity Search]
+    G -->|Cache Miss| H[ChromaDB Similarity Search top search_k]
     G -->|Cache Hit| I[Retrieved Chunks + Metadata]
     H --> I
 
-    I --> J[Build Context]
-    J --> K[Groq LLM]
-    K --> L[Answer + Citations]
+    I --> J{Use Reranker?}
+    J -->|No| K[Top search_k Chunks]
+    J -->|Yes| L[Cross-Encoder Scores Each Chunk]
+    L --> M[Top rerank_top_k Chunks]
+    K --> N[Build Context]
+    M --> N
+
+    N --> O[Groq LLM]
+    O --> P[Answer + Citations]
 ```
 
 ---
@@ -79,7 +85,7 @@ Average over 3 runs.
 
 | Chunk Size | Avg Score | Avg Pass Rate |
 | ---------- | --------- | ------------- |
-| 50 words   | 12/20     | 60%           |
+| 50 words   | 14/20     | 70%           |
 | 100 words  | 15.3/20   | 77%           |
 | 200 words  | 15/20     | 75%           |
 
@@ -89,16 +95,30 @@ Smaller chunks improved precision but often lost important context. Larger chunk
 
 ### Top-K Retrieval Evaluation
 
-| Top-K | Score | Pass Rate |
-| ----- | ----- | --------- |
-| k=1   | 13/20 | 65%       |
-| k=2   | 17/20 | 85%       |
-| k=3   | 16/20 | 80%       |
-| k=5   | 17/20 | 85%       |
+| Top-K | Score | Pass Rate | Retrieval Hit Rate | Avg Latency | Avg Tokens |
+| ----- | ----- | --------- | ------------------ | ----------- | ---------- |
+| k=1   | 13/20 | 65%       | —                  | —           | —          |
+| k=2   | 18/20 | 90%       | 88%                | 963ms       | 785        |
+| k=3   | 16/20 | 80%       | —                  | —           | —          |
+| k=5   | 17/20 | 85%       | 100%               | 6029ms      | 1788       |
 
-`k=2` provided the best tradeoff between answer quality, latency, and token usage for the current evaluation dataset.
+`k=2` gave the best balance of accuracy, latency, and token usage. Increasing to `k=5`
+achieved 100% retrieval hit rate but caused a 6× latency increase and more than doubled
+token usage — a significant efficiency tradeoff.
 
-Higher `top_k` values improved retrieval coverage in some cases, but increased latency and prompt token usage.
+---
+
+### Reranking Evaluation
+
+| Config        | search_k | chunks_to_LLM | Pass Rate | Retrieval Hit Rate | Avg Latency | Avg Tokens |
+| ------------- | -------- | ------------- | --------- | ------------------ | ----------- | ---------- |
+| No rerank     | 2        | 2             | 70%       | 88%                | 1001ms      | 785        |
+| Rerank (10→2) | 10       | 2             | 85%       | 88%                | 1195ms      | 770        |
+
+Reranking improved pass rate by 15 percentage points with only a ~200ms latency increase and similar token usage.
+
+Retrieval hit rate was identical in both configs — reranking did not help find the relevant chunk,
+but helped select the better chunk from a wider candidate pool, giving the LLM higher-quality context.
 
 ---
 
@@ -200,18 +220,23 @@ Example:
 
 ## Failure Analysis
 
-Observed failure categories include:
+### Failure Categories
 
-- retrieval misses at low `top_k` values
-- keyword evaluation strictness
-- paraphrased answers missing expected keywords
-- incomplete evidence retrieval
+| Question                       | Missing Keywords         | Failure Type                           |
+| ------------------------------ | ------------------------ | -------------------------------------- |
+| Q3 — cross vs self-pollination | `same flower`            | Selection failure (fixed by reranking) |
+| Q13 — biotic vs abiotic        | `wind`, `water`          | Selection failure (fixed by reranking) |
+| Q17 — seed dispersal           | `competition`, `coloniz` | Selection failure (fixed by reranking) |
+| Q15 — fertilisation            | `egg`                    | Generation failure (persistent)        |
+| Q16 — ovary structures         | `fruit`                  | Generation failure (persistent)        |
 
-Example:
+**Selection failures** — the correct chunk existed in the top-10 candidates but wasn't ranked
+in the final top-2 without reranking. Reranking fixed these by selecting better chunks from
+the wider pool.
 
-- Q15 initially failed because the correct fertilisation chunk was not retrieved at `top_k=2`
-- Increasing `top_k=5` successfully retrieved the relevant chunk
-- This improved retrieval quality but increased latency and prompt token usage
+**Generation failures** — the correct chunk was retrieved and selected in all configs, but the
+LLM answered correctly in meaning while omitting the specific keyword the evaluator expected.
+Q15 and Q16 are persistent across every configuration tested.
 
 ---
 
@@ -341,11 +366,11 @@ Useful for:
 
 ## Future Improvements
 
-- Cross-encoder reranking
-- Hybrid BM25 + vector retrieval
-- Query rewriting
-- Retrieval confidence scoring
-- LLM-as-a-judge evaluation
+- Query rewriting for phrasing robustness
+- Hybrid BM25 + dense vector retrieval
+- LLM-as-a-judge evaluation (replace keyword matching)
+- Retrieval confidence scoring via reranker scores
 - Streaming responses
 - Multi-document retrieval filtering
+- Retrieval dashboards and experiment tracking
 - Retrieval dashboards and experiment tracking
