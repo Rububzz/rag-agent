@@ -18,4 +18,5 @@ def rerank(question: str, retrieved_result: dict, top_n: int = 2) -> dict:
     return {
         "documents": [r[0] for r in ranked],
         "metadatas": [r[1] for r in ranked],
+        "scores": [float(r[2]) for r in ranked],
     }

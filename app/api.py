@@ -82,9 +82,11 @@ def query(req: QueryRequest):
             reranked_result = rerank(req.question, result, req.rerank_top_k)
             documents = reranked_result["documents"]
             metadatas = reranked_result["metadatas"]
+            scores = reranked_result["scores"]
         else:
             documents = result["documents"][: req.rerank_top_k]
             metadatas = result["metadatas"][: req.rerank_top_k]
+            scores = [None] * len(documents)
 
         context = "\n\n".join(
             f"[Source {i + 1}: {metadata['filename']} | chunk {metadata['chunk_index']}]\n{doc}"
@@ -112,8 +114,9 @@ def query(req: QueryRequest):
                     "filename": metadata["filename"],
                     "chunk_index": metadata["chunk_index"],
                     "preview": metadata["preview"],
+                    "score": score,
                 }
-                for metadata in metadatas
+                for metadata, score in zip(metadatas, scores)
             ],
         }
     except HTTPException:
@@ -152,9 +155,11 @@ def retrieve(req: QueryRequest):
             reranked_result = rerank(req.question, cache_result, req.rerank_top_k)
             documents = reranked_result["documents"]
             metadatas = reranked_result["metadatas"]
+            scores = reranked_result["scores"]
         else:
             documents = cache_result["documents"][: req.rerank_top_k]
             metadatas = cache_result["metadatas"][: req.rerank_top_k]
+            scores = [None] * len(documents)
         return {
             "question": req.question,
             "sources": [
@@ -163,8 +168,9 @@ def retrieve(req: QueryRequest):
                     "chunk_index": metadata["chunk_index"],
                     "preview": metadata["preview"],
                     "text": doc,
+                    "score": score,
                 }
-                for doc, metadata in zip(documents, metadatas)
+                for doc, metadata, score in zip(documents, metadatas, scores)
             ],
         }
     except HTTPException:
