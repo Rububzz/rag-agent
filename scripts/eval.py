@@ -20,7 +20,11 @@ def upload_document(filepath: str):
 
 
 def query(
-    question: str, search_k: int = 2, rerank_top_k: int = 10, use_rerank: bool = False
+    question: str,
+    search_k: int = 2,
+    rerank_top_k: int = 10,
+    use_rerank: bool = False,
+    use_rewrite_query: bool = False,
 ) -> dict:
     response = requests.post(
         f"{API_URL}/query",
@@ -29,6 +33,7 @@ def query(
             "search_k": search_k,
             "rerank_top_k": rerank_top_k,
             "use_rerank": use_rerank,
+            "use_rewrite_query": use_rewrite_query,
         },
     )
     return response.json()
@@ -52,13 +57,20 @@ def evaluate(answer: str, expected_keywords: list) -> dict:
     return result
 
 
-def main(search_k: int = 10, rerank_top_k: int = 2, use_rerank: bool = False):
+def main(
+    search_k: int = 10,
+    rerank_top_k: int = 2,
+    use_rerank: bool = False,
+    use_rewrite_query: bool = False,
+):
     questions = load_questions("scripts/questions.json")
     delete_document()
     upload_document("documents/Flower - Wikipedia.pdf")
     results = []
     for question in questions:
-        query_result = query(question["question"], search_k, rerank_top_k, use_rerank)
+        query_result = query(
+            question["question"], search_k, rerank_top_k, use_rerank, use_rewrite_query
+        )
 
         eval_result = evaluate(query_result["answer"], question["expected_keywords"])
         expected_chunks = question.get("expected_chunks")
@@ -120,6 +132,7 @@ def main(search_k: int = 10, rerank_top_k: int = 2, use_rerank: bool = False):
         "search_k": search_k,
         "rerank_top_k": rerank_top_k,
         "use_rerank": use_rerank,
+        "use_rewrite_query": use_rewrite_query,
         "pass_rate": round(passed / len(results) * 100),
         "retrieval_hit_rate": retrieval_hit_rate,
         "average_duration_ms": average_duration_ms,
@@ -131,7 +144,7 @@ def main(search_k: int = 10, rerank_top_k: int = 2, use_rerank: bool = False):
     outputdir.mkdir(exist_ok=True)
     output_path = (
         outputdir
-        / f"search_{search_k}_rerank_{rerank_top_k}_use_{int(use_rerank)}.json"
+        / f"search_{search_k}_rerank_{rerank_top_k}_use_{int(use_rerank)}_rewrite_{int(use_rewrite_query)}.json"
     )
     with open(output_path, "w") as f:
         json.dump(output, f, indent=4)
@@ -142,4 +155,5 @@ if __name__ == "__main__":
     search_k = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     rerank_top_k = int(sys.argv[2]) if len(sys.argv) > 2 else 2
     use_rerank = bool(int(sys.argv[3])) if len(sys.argv) > 3 else False
-    main(search_k, rerank_top_k, use_rerank)
+    use_rewrite_query = bool(int(sys.argv[4])) if len(sys.argv) > 4 else False
+    main(search_k, rerank_top_k, use_rerank, use_rewrite_query)

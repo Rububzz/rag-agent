@@ -108,17 +108,19 @@ token usage — a significant efficiency tradeoff.
 
 ---
 
-### Reranking Evaluation
+### Reranking and Query Rewriting Evaluation
 
-| Config        | search_k | chunks_to_LLM | Pass Rate | Retrieval Hit Rate | Avg Latency | Avg Tokens |
-| ------------- | -------- | ------------- | --------- | ------------------ | ----------- | ---------- |
-| No rerank     | 2        | 2             | 70%       | 88%                | 1001ms      | 785        |
-| Rerank (10→2) | 10       | 2             | 85%       | 88%                | 1195ms      | 770        |
+| Config                 | search_k | chunks_to_LLM | Pass Rate | Retrieval Hit Rate | Avg Latency | Avg Tokens |
+| ---------------------- | -------- | ------------- | --------- | ------------------ | ----------- | ---------- |
+| No rerank              | 2        | 2             | 70%       | 88%                | 1001ms      | 785        |
+| Rerank (10→2)          | 10       | 2             | 85%       | 88%                | 1195ms      | 770        |
+| Rerank + Query Rewrite | 10       | 2             | 85%       | 88%                | 3034ms      | 776        |
 
-Reranking improved pass rate by 15 percentage points with only a ~200ms latency increase and similar token usage.
+Reranking improved pass rate by 15 percentage points over the no-rerank baseline with only ~200ms latency increase.
 
-Retrieval hit rate was identical in both configs — reranking did not help find the relevant chunk,
-but helped select the better chunk from a wider candidate pool, giving the LLM higher-quality context.
+Query rewriting matched reranking at 85% but tripled latency to ~3034ms due to the extra LLM call required to generate alternative phrasings. It did not improve pass rate further, indicating that retrieval quality is no longer the main bottleneck — remaining failures are generation phrasing issues that query rewriting cannot fix.
+
+**Conclusion:** Reranking alone is the better tradeoff for this dataset. Query rewriting adds complexity and latency without accuracy gains when the bottleneck is generation rather than retrieval.
 
 ---
 
@@ -366,11 +368,10 @@ Useful for:
 
 ## Future Improvements
 
-- Query rewriting for phrasing robustness
+- Query rewriting — implemented and benchmarked; did not improve accuracy beyond reranking alone on current dataset
 - Hybrid BM25 + dense vector retrieval
 - LLM-as-a-judge evaluation (replace keyword matching)
 - Retrieval confidence scoring via reranker scores
 - Streaming responses
 - Multi-document retrieval filtering
-- Retrieval dashboards and experiment tracking
 - Retrieval dashboards and experiment tracking

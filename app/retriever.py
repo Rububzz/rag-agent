@@ -64,3 +64,26 @@ def delete_document():
     except Exception as e:
         logger.error(f"Failed to delete collection: {e}")
         raise RuntimeError(f"Failed to delete with error: {e}")
+
+
+def multi_search(questions: list[str], n: int):
+    cache = set()
+    results = []
+    for question in questions:
+        query_results = search(question, n)
+        metadatas = query_results["metadatas"]
+        for i in range(len(metadatas)):
+            if (metadatas[i]["chunk_index"], metadatas[i]["filename"]) in cache:
+                continue
+            else:
+                results.append(
+                    {
+                        "document": query_results["documents"][i],
+                        "metadata": query_results["metadatas"][i],
+                    }
+                )
+                cache.add((metadatas[i]["chunk_index"], metadatas[i]["filename"]))
+    return {
+        "documents": [result["document"] for result in results],
+        "metadatas": [result["metadata"] for result in results],
+    }

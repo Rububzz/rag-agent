@@ -8,8 +8,9 @@ from app.cache import clear_cache, get_cached, set_cached
 from app.chunker import chunk_text
 from app.llm import ask
 from app.parser import extract_text
+from app.query_rewriter import rewrite_query
 from app.reranker import rerank
-from app.retriever import add_documents, delete_document, search
+from app.retriever import add_documents, delete_document, multi_search, search
 
 app = FastAPI()
 
@@ -24,6 +25,7 @@ class QueryRequest(BaseModel):
     search_k: int = 10
     rerank_top_k: int = 2
     use_rerank: bool = False
+    use_rewrite_query: bool = False
 
 
 @app.post("/upload")
@@ -53,29 +55,36 @@ async def upload(file: UploadFile = File(...)):
 def query(req: QueryRequest):
     start = time.time()
     try:
-        cache_result = get_cached(req.question, req.search_k)
-        cache_hit = cache_result is not None
-        if not cache_hit:
-            results = search(req.question, n=req.search_k)
-            search_documents = results["documents"]
-            search_metadatas = results["metadatas"]
-            if not search_documents or all(d.strip() == "" for d in search_documents):
-                raise HTTPException(
-                    status_code=400,
-                    detail="No document found. Please upload a document",
-                )
-            cache_result = {
-                "documents": search_documents,
-                "metadatas": search_metadatas,
-            }
-            set_cached(req.question, req.search_k, cache_result)
+        if req.use_rewrite_query:
+            cache_hit = False
+            queries = [req.question] + rewrite_query(req.question, n=3)
+            result = multi_search(queries, req.search_k)
+        else:
+            result = get_cached(req.question, req.search_k)
+            cache_hit = result is not None
+            if not cache_hit:
+                results = search(req.question, n=req.search_k)
+                search_documents = results["documents"]
+                search_metadatas = results["metadatas"]
+                if not search_documents or all(
+                    d.strip() == "" for d in search_documents
+                ):
+                    raise HTTPException(
+                        status_code=400,
+                        detail="No document found. Please upload a document",
+                    )
+                result = {
+                    "documents": search_documents,
+                    "metadatas": search_metadatas,
+                }
+                set_cached(req.question, req.search_k, result)
         if req.use_rerank:
-            reranked_result = rerank(req.question, cache_result, req.rerank_top_k)
+            reranked_result = rerank(req.question, result, req.rerank_top_k)
             documents = reranked_result["documents"]
             metadatas = reranked_result["metadatas"]
         else:
-            documents = cache_result["documents"][: req.rerank_top_k]
-            metadatas = cache_result["metadatas"][: req.rerank_top_k]
+            documents = result["documents"][: req.rerank_top_k]
+            metadatas = result["metadatas"][: req.rerank_top_k]
 
         context = "\n\n".join(
             f"[Source {i + 1}: {metadata['filename']} | chunk {metadata['chunk_index']}]\n{doc}"

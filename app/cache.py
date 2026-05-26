@@ -2,7 +2,7 @@ import json
 
 import redis
 
-client = redis.Redis(host="localhost", port=6379)
+client = redis.Redis(host="redis", port=6379)
 
 
 def build_cache_key(question: str, top_k: int) -> str:
