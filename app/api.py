@@ -9,10 +9,9 @@ from app.chunker import chunk_text
 from app.llm import ask
 from app.parser import extract_text
 from app.query_rewriter import rewrite_query
-from app.reranker import rerank
+from app.reranker import RerankConfig, rerank
 from app.retriever import (
     add_documents,
-    bm25_retrieve,
     delete_document,
     hybrid_search,
     multi_search,
@@ -34,6 +33,7 @@ class QueryRequest(BaseModel):
     use_rerank: bool = False
     use_rewrite_query: bool = False
     use_hybrid: bool = False
+    rerank_score_threshold: float = 0.0
 
 
 @app.post("/upload")
@@ -90,7 +90,10 @@ def query(req: QueryRequest):
                 }
                 set_cached(req.question, req.search_k, result)
         if req.use_rerank:
-            reranked_result = rerank(req.question, result, req.rerank_top_k)
+            rerank_config = RerankConfig(
+                top_n=req.rerank_top_k, score_threshold=req.rerank_score_threshold
+            )
+            reranked_result = rerank(req.question, result, rerank_config)
             documents = reranked_result["documents"]
             metadatas = reranked_result["metadatas"]
             scores = reranked_result["scores"]
@@ -163,7 +166,10 @@ def retrieve(req: QueryRequest):
             }
             set_cached(req.question, req.search_k, cache_result)
         if req.use_rerank:
-            reranked_result = rerank(req.question, cache_result, req.rerank_top_k)
+            rerank_config = RerankConfig(
+                top_n=req.rerank_top_k, score_threshold=req.rerank_score_threshold
+            )
+            reranked_result = rerank(req.question, cache_result, rerank_config)
             documents = reranked_result["documents"]
             metadatas = reranked_result["metadatas"]
             scores = reranked_result["scores"]
