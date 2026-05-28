@@ -1,8 +1,20 @@
 import json
 import sys
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 import requests
+
+
+@dataclass
+class EvalConfig:
+    search_k: int = 10
+    rerank_top_k: int = 2
+    use_rerank: bool = False
+    use_rewrite_query: bool = False
+    use_hybrid: bool = False
+
 
 API_URL = "http://localhost:8000"
 
@@ -20,21 +32,17 @@ def upload_document(filepath: str):
 
 def query(
     question: str,
-    search_k: int = 2,
-    rerank_top_k: int = 10,
-    use_rerank: bool = False,
-    use_rewrite_query: bool = False,
-    use_hybrid: bool = False,
+    config: EvalConfig,
 ) -> dict:
     response = requests.post(
         f"{API_URL}/query",
         json={
             "question": question,
-            "search_k": search_k,
-            "rerank_top_k": rerank_top_k,
-            "use_rerank": use_rerank,
-            "use_rewrite_query": use_rewrite_query,
-            "use_hybrid": use_hybrid,
+            "search_k": config.search_k,
+            "rerank_top_k": config.rerank_top_k,
+            "use_rerank": config.use_rerank,
+            "use_rewrite_query": config.use_rewrite_query,
+            "use_hybrid": config.use_hybrid,
         },
     )
     return response.json()
@@ -58,13 +66,7 @@ def evaluate(answer: str, expected_keywords: list) -> dict:
     return result
 
 
-def main(
-    search_k: int = 10,
-    rerank_top_k: int = 2,
-    use_rerank: bool = False,
-    use_rewrite_query: bool = False,
-    use_hybrid: bool = False,
-):
+def main(config: EvalConfig):
     questions = load_questions("scripts/questions.json")
     delete_document()
     upload_document("documents/Flower - Wikipedia.pdf")
@@ -72,11 +74,7 @@ def main(
     for question in questions:
         query_result = query(
             question["question"],
-            search_k,
-            rerank_top_k,
-            use_rerank,
-            use_rewrite_query,
-            use_hybrid,
+            config,
         )
 
         eval_result = evaluate(query_result["answer"], question["expected_keywords"])
@@ -136,11 +134,13 @@ def main(
         print(f"Missing Keywords:{fr['keywords_missing']}")
 
     output = {
-        "search_k": search_k,
-        "rerank_top_k": rerank_top_k,
-        "use_rerank": use_rerank,
-        "use_rewrite_query": use_rewrite_query,
-        "use_hybrid": use_hybrid,
+        "config": {
+            "search_k": config.search_k,
+            "rerank_top_k": config.rerank_top_k,
+            "use_rerank": config.use_rerank,
+            "use_rewrite_query": config.use_rewrite_query,
+            "use_hybrid": config.use_hybrid,
+        },
         "pass_rate": round(passed / len(results) * 100),
         "retrieval_hit_rate": retrieval_hit_rate,
         "average_duration_ms": average_duration_ms,
@@ -148,22 +148,22 @@ def main(
         "results": results,
     }
 
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     outputdir = Path("eval_results")
     outputdir.mkdir(exist_ok=True)
-    output_path = (
-        outputdir
-        / f"search_{search_k}_rerank_{rerank_top_k}_use_{int(use_rerank)}_rewrite_{int(use_rewrite_query)}_{int(use_hybrid)}.json"
-    )
+    output_path = outputdir / f"eval_{timestamp}.json"
     with open(output_path, "w") as f:
         json.dump(output, f, indent=4)
     print(f"Saved eval results to {output_path}")
 
 
 if __name__ == "__main__":
-    search_k = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    rerank_top_k = int(sys.argv[2]) if len(sys.argv) > 2 else 2
-    use_rerank = bool(int(sys.argv[3])) if len(sys.argv) > 3 else False
-    use_rewrite_query = bool(int(sys.argv[4])) if len(sys.argv) > 4 else False
-    use_hybrid = bool(int(sys.argv[5])) if len(sys.argv) > 5 else False
+    config = EvalConfig(
+        search_k=int(sys.argv[1]) if len(sys.argv) > 1 else 10,
+        rerank_top_k=int(sys.argv[2]) if len(sys.argv) > 2 else 2,
+        use_rerank=bool(int(sys.argv[3])) if len(sys.argv) > 3 else False,
+        use_rewrite_query=bool(int(sys.argv[4])) if len(sys.argv) > 4 else False,
+        use_hybrid=bool(int(sys.argv[5])) if len(sys.argv) > 5 else False,
+    )
 
-    main(search_k, rerank_top_k, use_rerank, use_rewrite_query, use_hybrid)
+    main(config)
