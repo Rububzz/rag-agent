@@ -114,12 +114,13 @@ token usage — a significant efficiency tradeoff.
 | ---------------------- | -------- | ------------- | --------- | ------------------ | ----------- | ---------- |
 | No rerank              | 2        | 2             | 70%       | 88%                | 1001ms      | 785        |
 | Rerank (10→2)          | 10       | 2             | 85%       | 88%                | 1195ms      | 770        |
-| Rerank + Query Rewrite | 10       | 2             | 85%       | 88%                | 3034ms      | 776        |
+| Rerank + Query Rewrite | 10       | 2             | ~83%      | 88%                | ~3088ms     | ~775       |
 | Rerank + Hybrid Search | 10       | 2             | 80%       | 88%                | 2379ms      | 765        |
 
 Reranking improved pass rate by 15 percentage points over the baseline with only ~200ms latency increase.
 
 Query rewriting matched reranking at 85% but tripled latency due to the extra LLM call for generating alternative phrasings. No accuracy gain over reranking alone.
+Query rewriting was subsequently improved to generate diverse query types (semantic paraphrase, keyword-focused, broader context, technical terminology) instead of simple paraphrases, averaging ~83% across runs — no consistent improvement over reranking alone.
 
 Hybrid BM25 + dense search scored 80% — below reranking alone. Retrieval hit rate remained at 88% across all configs, indicating retrieval is not the bottleneck. Remaining failures are generation phrasing issues.
 
