@@ -5,3 +5,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def embed(text: str) -> list:
     return model.encode(text).tolist()
+
+
+def batch_embed(text: list[str]) -> list:
+    return model.encode(text).tolist()

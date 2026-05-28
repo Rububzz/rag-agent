@@ -1,10 +1,11 @@
 import logging
 from pathlib import Path
+from typing import Collection
 
 import chromadb
 
 from app.bm25_retriever import bm25_search, build_index
-from app.embedder import embed
+from app.embedder import batch_embed, embed
 
 logger = logging.getLogger(__name__)
 
@@ -15,26 +16,22 @@ PREVIEW_SIZE = 20
 client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 
 
-def get_collection():
+def get_collection() -> Collection:
     return client.get_or_create_collection(COLLECTION_NAME)
 
 
 def add_documents(chunks: list[str], filename: str):
     try:
         collection = get_collection()
-        for i, chunk in enumerate(chunks):
-            collection.add(
-                ids=[f"{filename}chunk{i}"],
-                embeddings=[embed(chunk)],
-                documents=[chunk],
-                metadatas=[
-                    {
-                        "filename": filename,
-                        "chunk_index": i,
-                        "preview": chunk[:PREVIEW_SIZE],
-                    }
-                ],
-            )
+        embedded_chunks = batch_embed(chunks)
+        ids = [f"{filename}chunk{i}" for i in range(len(embedded_chunks))]
+        metadatas = [
+            {"filename": filename, "chunk_index": i, "preview": chunk[:PREVIEW_SIZE]}
+            for i, chunk in enumerate(chunks)
+        ]
+        collection.add(
+            ids=ids, embeddings=embedded_chunks, documents=chunks, metadatas=metadatas
+        )
         logger.info(f"Added {len(chunks)} chunks to ChromaDB")
     except Exception as e:
         logger.error(f"Failed to add documents: {e}")
