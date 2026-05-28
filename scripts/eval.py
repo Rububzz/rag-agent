@@ -1,7 +1,6 @@
 import json
 import sys
 from pathlib import Path
-from textwrap import indent
 
 import requests
 
@@ -25,6 +24,7 @@ def query(
     rerank_top_k: int = 10,
     use_rerank: bool = False,
     use_rewrite_query: bool = False,
+    use_hybrid: bool = False,
 ) -> dict:
     response = requests.post(
         f"{API_URL}/query",
@@ -34,6 +34,7 @@ def query(
             "rerank_top_k": rerank_top_k,
             "use_rerank": use_rerank,
             "use_rewrite_query": use_rewrite_query,
+            "use_hybrid": use_hybrid,
         },
     )
     return response.json()
@@ -62,6 +63,7 @@ def main(
     rerank_top_k: int = 2,
     use_rerank: bool = False,
     use_rewrite_query: bool = False,
+    use_hybrid: bool = False,
 ):
     questions = load_questions("scripts/questions.json")
     delete_document()
@@ -69,7 +71,12 @@ def main(
     results = []
     for question in questions:
         query_result = query(
-            question["question"], search_k, rerank_top_k, use_rerank, use_rewrite_query
+            question["question"],
+            search_k,
+            rerank_top_k,
+            use_rerank,
+            use_rewrite_query,
+            use_hybrid,
         )
 
         eval_result = evaluate(query_result["answer"], question["expected_keywords"])
@@ -133,6 +140,7 @@ def main(
         "rerank_top_k": rerank_top_k,
         "use_rerank": use_rerank,
         "use_rewrite_query": use_rewrite_query,
+        "use_hybrid": use_hybrid,
         "pass_rate": round(passed / len(results) * 100),
         "retrieval_hit_rate": retrieval_hit_rate,
         "average_duration_ms": average_duration_ms,
@@ -144,7 +152,7 @@ def main(
     outputdir.mkdir(exist_ok=True)
     output_path = (
         outputdir
-        / f"search_{search_k}_rerank_{rerank_top_k}_use_{int(use_rerank)}_rewrite_{int(use_rewrite_query)}.json"
+        / f"search_{search_k}_rerank_{rerank_top_k}_use_{int(use_rerank)}_rewrite_{int(use_rewrite_query)}_{int(use_hybrid)}.json"
     )
     with open(output_path, "w") as f:
         json.dump(output, f, indent=4)
@@ -156,4 +164,6 @@ if __name__ == "__main__":
     rerank_top_k = int(sys.argv[2]) if len(sys.argv) > 2 else 2
     use_rerank = bool(int(sys.argv[3])) if len(sys.argv) > 3 else False
     use_rewrite_query = bool(int(sys.argv[4])) if len(sys.argv) > 4 else False
-    main(search_k, rerank_top_k, use_rerank, use_rewrite_query)
+    use_hybrid = bool(int(sys.argv[5])) if len(sys.argv) > 5 else False
+
+    main(search_k, rerank_top_k, use_rerank, use_rewrite_query, use_hybrid)

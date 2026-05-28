@@ -3,6 +3,7 @@ from pathlib import Path
 
 import chromadb
 
+from app.bm25_retriever import bm25_search, build_index
 from app.embedder import embed
 
 logger = logging.getLogger(__name__)
@@ -87,3 +88,34 @@ def multi_search(questions: list[str], n: int):
         "documents": [result["document"] for result in results],
         "metadatas": [result["metadata"] for result in results],
     }
+
+
+def bm25_retrieve(question: str, n: int) -> dict:
+    collection = get_collection()
+    data = collection.get(include=["documents", "metadatas"])
+    chunks = data["documents"]
+    metadatas = data["metadatas"]
+    index = build_index(chunks)
+    top_scores = bm25_search(index, chunks, question, n)
+    results = []
+    for i in top_scores:
+        results.append({"document": chunks[i], "metadata": metadatas[i]})
+    return {
+        "documents": [result["document"] for result in results],
+        "metadatas": [result["metadata"] for result in results],
+    }
+
+
+def hybrid_search(question: str, n: int) -> dict:
+    seen = set()
+    init_search = search(question, n)
+    bm_search = bm25_retrieve(question, n)
+    for result in init_search["metadatas"]:
+        seen.add((result["filename"], result["chunk_index"]))
+    for i in range(len(bm_search["documents"])):
+        metadata = bm_search["metadatas"][i]
+        if (metadata["filename"], metadata["chunk_index"]) not in seen:
+            seen.add((metadata["filename"], metadata["chunk_index"]))
+            init_search["documents"].append(bm_search["documents"][i])
+            init_search["metadatas"].append(bm_search["metadatas"][i])
+    return init_search

@@ -10,7 +10,14 @@ from app.llm import ask
 from app.parser import extract_text
 from app.query_rewriter import rewrite_query
 from app.reranker import rerank
-from app.retriever import add_documents, delete_document, multi_search, search
+from app.retriever import (
+    add_documents,
+    bm25_retrieve,
+    delete_document,
+    hybrid_search,
+    multi_search,
+    search,
+)
 
 app = FastAPI()
 
@@ -26,6 +33,7 @@ class QueryRequest(BaseModel):
     rerank_top_k: int = 2
     use_rerank: bool = False
     use_rewrite_query: bool = False
+    use_hybrid: bool = False
 
 
 @app.post("/upload")
@@ -55,7 +63,10 @@ async def upload(file: UploadFile = File(...)):
 def query(req: QueryRequest):
     start = time.time()
     try:
-        if req.use_rewrite_query:
+        if req.use_hybrid:
+            cache_hit = False
+            result = hybrid_search(req.question, req.search_k)
+        elif req.use_rewrite_query:
             cache_hit = False
             queries = [req.question] + rewrite_query(req.question, n=3)
             result = multi_search(queries, req.search_k)

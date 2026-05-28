@@ -108,19 +108,24 @@ token usage — a significant efficiency tradeoff.
 
 ---
 
-### Reranking and Query Rewriting Evaluation
+### Retrieval Configuration Benchmarks
 
 | Config                 | search_k | chunks_to_LLM | Pass Rate | Retrieval Hit Rate | Avg Latency | Avg Tokens |
 | ---------------------- | -------- | ------------- | --------- | ------------------ | ----------- | ---------- |
 | No rerank              | 2        | 2             | 70%       | 88%                | 1001ms      | 785        |
 | Rerank (10→2)          | 10       | 2             | 85%       | 88%                | 1195ms      | 770        |
 | Rerank + Query Rewrite | 10       | 2             | 85%       | 88%                | 3034ms      | 776        |
+| Rerank + Hybrid Search | 10       | 2             | 80%       | 88%                | 2379ms      | 765        |
 
-Reranking improved pass rate by 15 percentage points over the no-rerank baseline with only ~200ms latency increase.
+Reranking improved pass rate by 15 percentage points over the baseline with only ~200ms latency increase.
 
-Query rewriting matched reranking at 85% but tripled latency to ~3034ms due to the extra LLM call required to generate alternative phrasings. It did not improve pass rate further, indicating that retrieval quality is no longer the main bottleneck — remaining failures are generation phrasing issues that query rewriting cannot fix.
+Query rewriting matched reranking at 85% but tripled latency due to the extra LLM call for generating alternative phrasings. No accuracy gain over reranking alone.
 
-**Conclusion:** Reranking alone is the better tradeoff for this dataset. Query rewriting adds complexity and latency without accuracy gains when the bottleneck is generation rather than retrieval.
+Hybrid BM25 + dense search scored 80% — below reranking alone. Retrieval hit rate remained at 88% across all configs, indicating retrieval is not the bottleneck. Remaining failures are generation phrasing issues.
+
+Hybrid search would likely show stronger gains on documents with exact technical terms, acronyms, or product names where BM25 keyword matching outperforms dense semantic search.
+
+**Best config for this dataset:** Rerank (10→2) — highest accuracy with acceptable latency.
 
 ---
 
