@@ -89,6 +89,15 @@ def main(config: EvalConfig):
             eval_result["retrieval_hit"] = any(
                 chunk in retrieved_chunks for chunk in expected_chunks
             )
+            relevant_retrieved = len(set(retrieved_chunks) & set(expected_chunks))
+            eval_result["precision_at_k"] = relevant_retrieved / len(retrieved_chunks)
+            for rank, chunk in enumerate(retrieved_chunks, start=1):
+                if chunk in expected_chunks:
+                    reciprocal_rank = 1 / rank
+                    break
+            else:
+                reciprocal_rank = 0
+            eval_result["reciprocal_rank"] = reciprocal_rank
         else:
             eval_result["retrieval_hit"] = None
         eval_result["duration_ms"] = query_result.get("duration_ms")
@@ -107,8 +116,16 @@ def main(config: EvalConfig):
 
     durations = [r["duration_ms"] for r in results]
     tokens = [r["token_usage"]["total_tokens"] for r in results]
+    total_precision = [
+        r["precision_at_k"] for r in results if r.get("precision_at_k") is not None
+    ]
+    total_reciprocal_rank = [
+        r["reciprocal_rank"] for r in results if r.get("precision_at_k") is not None
+    ]
     average_duration_ms = sum(durations) / len(durations)
     average_total_tokens = sum(tokens) / len(tokens)
+    average_precision = sum(total_precision) / len(total_precision)
+    average_reciprocal_rank = sum(total_reciprocal_rank) / len(total_reciprocal_rank)
     passed = sum(1 for r in results if r["passed"])
     print(f"\n=== EVAL SUMMARY ===")
     print(f"Score: {passed}/{len(results)}")
@@ -123,6 +140,8 @@ def main(config: EvalConfig):
         retrieval_hit_rate = round(retrieval_hit / len(retrieval_result) * 100)
         print(f"\n Retrieval Hit Rate: {retrieval_hit_rate}%")
         print(f"\n Retrieval Hit:{retrieval_hit} / {len(retrieval_result)}")
+        print(f"\n Retrieval precision at k: {average_precision}")
+        print(f"\n Reciprocal Rank: {average_reciprocal_rank}")
     else:
         retrieval_hit_rate = None
         print(f"\n Retrieval Hit Rate: N/A")
