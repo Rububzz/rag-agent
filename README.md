@@ -110,12 +110,12 @@ token usage — a significant efficiency tradeoff.
 
 ### Retrieval Configuration Benchmarks
 
-| Config                 | search_k | chunks_to_LLM | Pass Rate | Retrieval Hit Rate | Avg Latency | Avg Tokens |
-| ---------------------- | -------- | ------------- | --------- | ------------------ | ----------- | ---------- |
-| No rerank              | 2        | 2             | 70%       | 88%                | 1001ms      | 785        |
-| Rerank (10→2)          | 10       | 2             | 85%       | 88%                | 1195ms      | 770        |
-| Rerank + Query Rewrite | 10       | 2             | ~83%      | 88%                | ~3088ms     | ~775       |
-| Rerank + Hybrid Search | 10       | 2             | 80%       | 88%                | 2379ms      | 765        |
+| Config                 | search_k | chunks_to_LLM | Pass Rate | Hit Rate | Precision@K | MRR  | Avg Latency | Avg Tokens |
+| ---------------------- | -------- | ------------- | --------- | -------- | ----------- | ---- | ----------- | ---------- |
+| No rerank              | 2        | 2             | 70%       | 88%      | 0.50        | 0.81 | 1007ms      | 789        |
+| Rerank (10→2)          | 10       | 2             | 85%       | 88%      | 0.44        | 0.81 | 1195ms      | 770        |
+| Rerank + Query Rewrite | 10       | 2             | ~83%      | 88%      | —           | —    | ~3088ms     | ~775       |
+| Rerank + Hybrid Search | 10       | 2             | 80%       | 88%      | —           | —    | 2379ms      | 765        |
 
 Reranking improved pass rate by 15 percentage points over the baseline with only ~200ms latency increase.
 
