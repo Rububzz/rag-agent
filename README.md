@@ -114,8 +114,8 @@ token usage — a significant efficiency tradeoff.
 | ---------------------- | -------- | ------------- | --------- | -------- | ----------- | ---- | ----------- | ---------- |
 | No rerank              | 2        | 2             | 70%       | 88%      | 0.50        | 0.81 | 1007ms      | 789        |
 | Rerank (10→2)          | 10       | 2             | 85%       | 88%      | 0.44        | 0.81 | 1195ms      | 770        |
-| Rerank + Query Rewrite | 10       | 2             | ~83%      | 88%      | —           | —    | ~3088ms     | ~775       |
-| Rerank + Hybrid Search | 10       | 2             | 80%       | 88%      | —           | —    | 2379ms      | 765        |
+| Rerank + Query Rewrite | 10       | 2             | 75%       | 88%      | 0.44        | 0.81 | 4863ms      | 796        |
+| Rerank + Hybrid Search | 10       | 2             | 80%       | 88%      | 0.44        | 0.81 | 2491ms      | 765        |
 
 Reranking improved pass rate by 15 percentage points over the baseline with only ~200ms latency increase.
 
@@ -127,6 +127,31 @@ Hybrid BM25 + dense search scored 80% — below reranking alone. Retrieval hit r
 Hybrid search would likely show stronger gains on documents with exact technical terms, acronyms, or product names where BM25 keyword matching outperforms dense semantic search.
 
 **Best config for this dataset:** Rerank (10→2) — highest accuracy with acceptable latency.
+
+## Key Findings
+
+**Reranking is the highest-value improvement.**
+Adding a cross-encoder reranker improved pass rate by 15 percentage points (70% → 85%)
+with only ~200ms latency increase. It is the best tradeoff of accuracy vs cost in this pipeline.
+
+**Retrieval is not the bottleneck.**
+Retrieval hit rate, Precision@K, and MRR are identical across all configurations at 88%,
+0.44, and 0.81 respectively. Adding query rewriting and hybrid search did not improve
+retrieval quality — the correct chunks were already being found.
+
+**Remaining failures are generation issues.**
+Q15 and Q16 fail persistently across every configuration. The correct chunk is retrieved
+and ranked highly (MRR=0.81) but the LLM omits specific expected keywords. This is an
+evaluation strictness issue — keyword matching cannot detect semantically correct answers.
+
+**More complexity does not mean better results.**
+Query rewriting and hybrid search added significant latency (3-4x) without accuracy gains
+on this dataset. Both would likely show stronger gains on documents with technical jargon,
+acronyms, or exact terminology where semantic search alone struggles.
+
+**LLM-as-a-judge would improve evaluation accuracy.**
+Keyword matching produces false negatives on semantically correct answers. Replacing it
+with an LLM-based evaluator is the highest-value next improvement.
 
 ---
 
@@ -375,7 +400,7 @@ Useful for:
 ## Future Improvements
 
 - Query rewriting — implemented and benchmarked; did not improve accuracy beyond reranking alone on current dataset
-- Hybrid BM25 + dense vector retrieval
+- Hybrid BM25 + dense vector retrieval — implemented and benchmarked; did not improve accuracy beyond reranking alone on current dataset
 - LLM-as-a-judge evaluation (replace keyword matching)
 - Retrieval confidence scoring via reranker scores
 - Streaming responses
